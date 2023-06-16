@@ -26,14 +26,6 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -------------------------------------------------------------------------------
 =#
-
-#=
-using HTTP, CSV
-data_url = "https://raw.githubusercontent.com/MichaelBarmann/ParamEst_MRE/main/sample_data.csv"
-my_file = CSV.File(HTTP.get(data_url).body)
-df = DataFrame(my_file)
-=#
-
 """
 Module:\n
     FijLung\n
