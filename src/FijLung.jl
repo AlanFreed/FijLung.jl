@@ -26,6 +26,14 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -------------------------------------------------------------------------------
 =#
+
+#=
+using HTTP, CSV
+data_url = "https://raw.githubusercontent.com/MichaelBarmann/ParamEst_MRE/main/sample_data.csv"
+my_file = CSV.File(HTTP.get(data_url).body)
+df = DataFrame(my_file)
+=#
+
 """
 Module:\n
     FijLung\n
@@ -36,7 +44,7 @@ This module constructs deformation gradient histories at three locations taken f
     F_loc1,         # Raw data: deformation gradient at location 1.\n
     F_loc2,         # Raw data: deformation gradient at location 2.\n
     F_loc3,         # Raw data: deformation gradient at location 3.\n
-    SplineF,        # Type used to hold these splined data.\n
+    SplineF,        # Type used to hold these spline data.\n
     newSplineF      # A constructor for type SplineF.\n
 *Note:* Functions t_loc1, t_loc2, t_loc3, F_loc1, F_loc2 and F_loc3 have hardwired paths for reading in the data files. You will need to edit these paths so that they point to the appropriate raw CSV files that you have placed on your machine.
 """
@@ -46,6 +54,7 @@ using
     BSplineKit,
     CSV,
     DataFrames,
+    HTTP,
     PhysicalFields,
     StaticArrays
 
@@ -74,7 +83,9 @@ This function returns an instance of type `PhysicalFields.ArrayOfPhysicalScalars
 """
 function t_loc1()::ArrayOfPhysicalScalars
     # Open an existing file and read its data as a DataFrames.DataFrame object.
-    dataF11 = CSV.read("data/Loc1/F11-loc1.csv", DataFrame; header=1)
+    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc1/F11-loc1.csv"
+    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataF11 = CSV.read(csvFile, DataFrame; header=1)
     # Create an array holding the time for each data entry.
     (N, M) = size(dataF11)
     if M ≠ 2
@@ -100,16 +111,34 @@ Function:\n
 This function returns an instance of type `PhysicalFields.ArrayOfPhysicalTensors`, where each element within the array holds a deformation gradient tensor evaluated at location 1 (just under the visceral pleura) from an FEA of a human torso subjected to a high-energy ballistic impact. The time associated with each entry is supplied by the function `t_loc1()`.
 """
 function F_loc1()::ArrayOfPhysicalTensors
-    # Open existing files and read in their data as DataFrames.DataFrame objects.
-    dataF11 = CSV.read("data/Loc1/F11-loc1.csv", DataFrame; header=1)
-    dataF12 = CSV.read("data/Loc1/F12-loc1.csv", DataFrame; header=1)
-    dataF13 = CSV.read("data/Loc1/F13-loc1.csv", DataFrame; header=1)
-    dataF21 = CSV.read("data/Loc1/F21-loc1.csv", DataFrame; header=1)
-    dataF22 = CSV.read("data/Loc1/F22-loc1.csv", DataFrame; header=1)
-    dataF23 = CSV.read("data/Loc1/F23-loc1.csv", DataFrame; header=1)
-    dataF31 = CSV.read("data/Loc1/F31-loc1.csv", DataFrame; header=1)
-    dataF32 = CSV.read("data/Loc1/F32-loc1.csv", DataFrame; header=1)
-    dataF33 = CSV.read("data/Loc1/F33-loc1.csv", DataFrame; header=1)
+    # Open existing files. Read in their data as DataFrames.DataFrame objects.
+    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc1/F11-loc1.csv"
+    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataF11 = CSV.read(csvFile, DataFrame; header=1)
+    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc1/F12-loc1.csv"
+    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataF12 = CSV.read(csvFile, DataFrame; header=1)
+    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc1/F13-loc1.csv"
+    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataF13 = CSV.read(csvFile, DataFrame; header=1)
+    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc1/F21-loc1.csv"
+    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataF21 = CSV.read(csvFile, DataFrame; header=1)
+    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc1/F22-loc1.csv"
+    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataF22 = CSV.read(csvFile, DataFrame; header=1)
+    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc1/F23-loc1.csv"
+    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataF23 = CSV.read(csvFile, DataFrame; header=1)
+    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc1/F31-loc1.csv"
+    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataF31 = CSV.read(csvFile, DataFrame; header=1)
+    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc1/F32-loc1.csv"
+    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataF32 = CSV.read(csvFile, DataFrame; header=1)
+    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc1/F33-loc1.csv"
+    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataF33 = CSV.read(csvFile, DataFrame; header=1)
     # Size the arrays.
     (N, M) = size(dataF11)
     if M ≠ 2
@@ -184,7 +213,9 @@ This function returns an instance of type `PhysicalFields.ArrayOfPhysicalScalars
 """
 function t_loc2()::ArrayOfPhysicalScalars
     # Open an existing file and read its data as a DataFrames.DataFrame object.
-    dataF11 = CSV.read("data/Loc2/F11-loc2.csv", DataFrame; header=1)
+    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc2/F11-loc2.csv"
+    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataF11 = CSV.read(csvFile, DataFrame; header=1)
     # Create an array holding the time for each data entry.
     (N, M) = size(dataF11)
     if M ≠ 2
@@ -210,16 +241,34 @@ Function:\n
 This function returns an instance of type `PhysicalFields.ArrayOfPhysicalTensors`, where each element within the array holds a deformation gradient tensor evaluated at location 2 (roughly in the center of the lung) from an FEA of a human torso subjected to a high-energy ballistic impact. The time associated with each entry is supplied by the function `t_loc2()`.
 """
 function F_loc2()::ArrayOfPhysicalTensors
-    # Open existing files and read in their data as DataFrames.DataFrame objects.
-    dataF11 = CSV.read("data/Loc2/F11-loc2.csv", DataFrame; header=1)
-    dataF12 = CSV.read("data/Loc2/F12-loc2.csv", DataFrame; header=1)
-    dataF13 = CSV.read("data/Loc2/F13-loc2.csv", DataFrame; header=1)
-    dataF21 = CSV.read("data/Loc2/F21-loc2.csv", DataFrame; header=1)
-    dataF22 = CSV.read("data/Loc2/F22-loc2.csv", DataFrame; header=1)
-    dataF23 = CSV.read("data/Loc2/F23-loc2.csv", DataFrame; header=1)
-    dataF31 = CSV.read("data/Loc2/F31-loc2.csv", DataFrame; header=1)
-    dataF32 = CSV.read("data/Loc2/F32-loc2.csv", DataFrame; header=1)
-    dataF33 = CSV.read("data/Loc2/F33-loc2.csv", DataFrame; header=1)
+    # Open existing files. Read in their data as DataFrames.DataFrame objects.
+    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc2/F11-loc2.csv"
+    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataF11 = CSV.read(csvFile, DataFrame; header=1)
+    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc2/F12-loc2.csv"
+    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataF12 = CSV.read(csvFile, DataFrame; header=1)
+    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc2/F13-loc2.csv"
+    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataF13 = CSV.read(csvFile, DataFrame; header=1)
+    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc2/F21-loc2.csv"
+    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataF21 = CSV.read(csvFile, DataFrame; header=1)
+    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc2/F22-loc2.csv"
+    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataF22 = CSV.read(csvFile, DataFrame; header=1)
+    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc2/F23-loc2.csv"
+    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataF23 = CSV.read(csvFile, DataFrame; header=1)
+    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc2/F31-loc2.csv"
+    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataF31 = CSV.read(csvFile, DataFrame; header=1)
+    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc2/F32-loc2.csv"
+    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataF32 = CSV.read(csvFile, DataFrame; header=1)
+    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc2/F33-loc2.csv"
+    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataF33 = CSV.read(csvFile, DataFrame; header=1)
     # Size the arrays.
     (N, M) = size(dataF11)
     if M ≠ 2
@@ -294,7 +343,9 @@ This function returns an instance of type `PhysicalFields.ArrayOfPhysicalScalars
 """
 function t_loc3()::ArrayOfPhysicalScalars
     # Open an existing file and read its data as a DataFrames.DataFrame object.
-    dataF11 = CSV.read("data/Loc3/F11-loc3.csv", DataFrame; header=1)
+    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc3/F11-loc3.csv"
+    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataF11 = CSV.read(csvFile, DataFrame; header=1)
     # Create an array holding the time for each data entry.
     (N, M) = size(dataF11)
     if M ≠ 2
@@ -320,16 +371,34 @@ Function:\n
 This function returns an instance of type `PhysicalFields.ArrayOfPhysicalTensors`, where each element within the array holds a deformation gradient tensor evaluated at location 3 (adjacent to a bronchiole tube) from an FEA of a human torso subjected to a high-energy ballistic impact. The time associated with each entry is supplied by the function `t_loc3()`.
 """
 function F_loc3()::ArrayOfPhysicalTensors
-    # Open existing files and read in their data as DataFrames.DataFrame objects.
-    dataF11 = CSV.read("data/Loc3/F11-loc3.csv", DataFrame; header=1)
-    dataF12 = CSV.read("data/Loc3/F12-loc3.csv", DataFrame; header=1)
-    dataF13 = CSV.read("data/Loc3/F13-loc3.csv", DataFrame; header=1)
-    dataF21 = CSV.read("data/Loc3/F21-loc3.csv", DataFrame; header=1)
-    dataF22 = CSV.read("data/Loc3/F22-loc3.csv", DataFrame; header=1)
-    dataF23 = CSV.read("data/Loc3/F23-loc3.csv", DataFrame; header=1)
-    dataF31 = CSV.read("data/Loc3/F31-loc3.csv", DataFrame; header=1)
-    dataF32 = CSV.read("data/Loc3/F32-loc3.csv", DataFrame; header=1)
-    dataF33 = CSV.read("data/Loc3/F33-loc3.csv", DataFrame; header=1)
+    # Open existing files. Read in their data as DataFrames.DataFrame objects.
+    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc3/F11-loc3.csv"
+    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataF11 = CSV.read(csvFile, DataFrame; header=1)
+    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc3/F12-loc3.csv"
+    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataF12 = CSV.read(csvFile, DataFrame; header=1)
+    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc3/F13-loc3.csv"
+    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataF13 = CSV.read(csvFile, DataFrame; header=1)
+    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc3/F21-loc3.csv"
+    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataF21 = CSV.read(csvFile, DataFrame; header=1)
+    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc3/F22-loc3.csv"
+    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataF22 = CSV.read(csvFile, DataFrame; header=1)
+    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc3/F23-loc3.csv"
+    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataF23 = CSV.read(csvFile, DataFrame; header=1)
+    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc3/F31-loc3.csv"
+    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataF31 = CSV.read(csvFile, DataFrame; header=1)
+    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc3/F32-loc3.csv"
+    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataF32 = CSV.read(csvFile, DataFrame; header=1)
+    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc3/F33-loc3.csv"
+    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataF33 = CSV.read(csvFile, DataFrame; header=1)
     # Size the arrays.
     (N, M) = size(dataF11)
     if M ≠ 2
