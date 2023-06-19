@@ -46,7 +46,7 @@ using
     BSplineKit,
     CSV,
     DataFrames,
-    HTTP,
+    Downloads,
     PhysicalFields,
     StaticArrays
 
@@ -75,13 +75,13 @@ This function returns an instance of type `PhysicalFields.ArrayOfPhysicalScalars
 """
 function t_loc1()::ArrayOfPhysicalScalars
     # Open an existing file and read its data as a DataFrames.DataFrame object.
-    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc1/F11-loc1.csv"
-    csvFile = CSV.File(HTTP.get(dataURL).body)
-    dataF11 = CSV.read(csvFile, DataFrame; header=1)
+    dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc1/F11.csv"
+    csvFile = CSV.File(Downloads.download(dataURL))
+    dataF11 = CSV.read(csvFile, DataFrame)
     # Create an array holding the time for each data entry.
     (N, M) = size(dataF11)
     if M ≠ 2
-        msg = "Files Fij-loc1.csv have an unexpected format."
+        msg = "Files Fij.csv have an unexpected format."
         throw(ErrorException(msg))
     end
     # Create a new array of times whose initial time is t₁.
@@ -104,37 +104,37 @@ This function returns an instance of type `PhysicalFields.ArrayOfPhysicalTensors
 """
 function F_loc1()::ArrayOfPhysicalTensors
     # Open existing files. Read in their data as DataFrames.DataFrame objects.
-    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc1/F11-loc1.csv"
-    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc1/F11.csv"
+    csvFile = CSV.File(Downloads.download(dataURL))
     dataF11 = CSV.read(csvFile, DataFrame; header=1)
-    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc1/F12-loc1.csv"
-    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc1/F12.csv"
+    csvFile = CSV.File(Downloads.download(dataURL))
     dataF12 = CSV.read(csvFile, DataFrame; header=1)
-    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc1/F13-loc1.csv"
-    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc1/F13.csv"
+    csvFile = CSV.File(Downloads.download(dataURL))
     dataF13 = CSV.read(csvFile, DataFrame; header=1)
-    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc1/F21-loc1.csv"
-    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc1/F21.csv"
+    csvFile = CSV.File(Downloads.download(dataURL))
     dataF21 = CSV.read(csvFile, DataFrame; header=1)
-    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc1/F22-loc1.csv"
-    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc1/F22.csv"
+    csvFile = CSV.File(Downloads.download(dataURL))
     dataF22 = CSV.read(csvFile, DataFrame; header=1)
-    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc1/F23-loc1.csv"
-    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc1/F23.csv"
+    csvFile = CSV.File(Downloads.download(dataURL))
     dataF23 = CSV.read(csvFile, DataFrame; header=1)
-    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc1/F31-loc1.csv"
-    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc1/F31.csv"
+    csvFile = CSV.File(Downloads.download(dataURL))
     dataF31 = CSV.read(csvFile, DataFrame; header=1)
-    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc1/F32-loc1.csv"
-    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc1/F32.csv"
+    csvFile = CSV.File(Downloads.download(dataURL))
     dataF32 = CSV.read(csvFile, DataFrame; header=1)
-    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc1/F33-loc1.csv"
-    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc1/F33.csv"
+    csvFile = CSV.File(Downloads.download(dataURL))
     dataF33 = CSV.read(csvFile, DataFrame; header=1)
     # Size the arrays.
     (N, M) = size(dataF11)
     if M ≠ 2
-        msg = "Files Fij-loc1.csv have an unexpected format."
+        msg = "Files Fij.csv have an unexpected format."
         throw(ErrorException(msg))
     end
     # Create 9 scalar components for a deformation gradient.
@@ -205,13 +205,13 @@ This function returns an instance of type `PhysicalFields.ArrayOfPhysicalScalars
 """
 function t_loc2()::ArrayOfPhysicalScalars
     # Open an existing file and read its data as a DataFrames.DataFrame object.
-    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc2/F11-loc2.csv"
-    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc2/F11.csv"
+    csvFile = CSV.File(Downloads.download(dataURL))
     dataF11 = CSV.read(csvFile, DataFrame; header=1)
     # Create an array holding the time for each data entry.
     (N, M) = size(dataF11)
     if M ≠ 2
-        msg = "Files Fij-loc2.csv have an unexpected format."
+        msg = "Files Fij.csv have an unexpected format."
         throw(ErrorException(msg))
     end
     # Create a new array of times whose initial time is t₁.
@@ -234,37 +234,37 @@ This function returns an instance of type `PhysicalFields.ArrayOfPhysicalTensors
 """
 function F_loc2()::ArrayOfPhysicalTensors
     # Open existing files. Read in their data as DataFrames.DataFrame objects.
-    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc2/F11-loc2.csv"
-    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc2/F11.csv"
+    csvFile = CSV.File(Downloads.download(dataURL))
     dataF11 = CSV.read(csvFile, DataFrame; header=1)
-    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc2/F12-loc2.csv"
-    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc2/F12.csv"
+    csvFile = CSV.File(Downloads.download(dataURL))
     dataF12 = CSV.read(csvFile, DataFrame; header=1)
-    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc2/F13-loc2.csv"
-    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc2/F13.csv"
+    csvFile = CSV.File(Downloads.download(dataURL))
     dataF13 = CSV.read(csvFile, DataFrame; header=1)
-    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc2/F21-loc2.csv"
-    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc2/F21.csv"
+    csvFile = CSV.File(Downloads.download(dataURL))
     dataF21 = CSV.read(csvFile, DataFrame; header=1)
-    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc2/F22-loc2.csv"
-    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc2/F22.csv"
+    csvFile = CSV.File(Downloads.download(dataURL))
     dataF22 = CSV.read(csvFile, DataFrame; header=1)
-    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc2/F23-loc2.csv"
-    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc2/F23.csv"
+    csvFile = CSV.File(Downloads.download(dataURL))
     dataF23 = CSV.read(csvFile, DataFrame; header=1)
-    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc2/F31-loc2.csv"
-    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc2/F31.csv"
+    csvFile = CSV.File(Downloads.download(dataURL))
     dataF31 = CSV.read(csvFile, DataFrame; header=1)
-    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc2/F32-loc2.csv"
-    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc2/F32.csv"
+    csvFile = CSV.File(Downloads.download(dataURL))
     dataF32 = CSV.read(csvFile, DataFrame; header=1)
-    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc2/F33-loc2.csv"
-    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc2/F33.csv"
+    csvFile = CSV.File(Downloads.download(dataURL))
     dataF33 = CSV.read(csvFile, DataFrame; header=1)
     # Size the arrays.
     (N, M) = size(dataF11)
     if M ≠ 2
-        msg = "Files Fij-loc2.csv have an unexpected format."
+        msg = "Files Fij.csv have an unexpected format."
         throw(ErrorException(msg))
     end
     # Create 9 scalar components for a deformation gradient.
@@ -335,13 +335,13 @@ This function returns an instance of type `PhysicalFields.ArrayOfPhysicalScalars
 """
 function t_loc3()::ArrayOfPhysicalScalars
     # Open an existing file and read its data as a DataFrames.DataFrame object.
-    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc3/F11-loc3.csv"
-    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc3/F11.csv"
+    csvFile = CSV.File(Downloads.download(dataURL))
     dataF11 = CSV.read(csvFile, DataFrame; header=1)
     # Create an array holding the time for each data entry.
     (N, M) = size(dataF11)
     if M ≠ 2
-        msg = "Files Fij-loc3.csv have an unexpected format."
+        msg = "Files Fij.csv have an unexpected format."
         throw(ErrorException(msg))
     end
     # Create a new array of times whose initial time is t₁.
@@ -364,37 +364,37 @@ This function returns an instance of type `PhysicalFields.ArrayOfPhysicalTensors
 """
 function F_loc3()::ArrayOfPhysicalTensors
     # Open existing files. Read in their data as DataFrames.DataFrame objects.
-    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc3/F11-loc3.csv"
-    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc3/F11.csv"
+    csvFile = CSV.File(Downloads.download(dataURL))
     dataF11 = CSV.read(csvFile, DataFrame; header=1)
-    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc3/F12-loc3.csv"
-    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc3/F12.csv"
+    csvFile = CSV.File(Downloads.download(dataURL))
     dataF12 = CSV.read(csvFile, DataFrame; header=1)
-    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc3/F13-loc3.csv"
-    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc3/F13.csv"
+    csvFile = CSV.File(Downloads.download(dataURL))
     dataF13 = CSV.read(csvFile, DataFrame; header=1)
-    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc3/F21-loc3.csv"
-    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc3/F21.csv"
+    csvFile = CSV.File(Downloads.download(dataURL))
     dataF21 = CSV.read(csvFile, DataFrame; header=1)
-    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc3/F22-loc3.csv"
-    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc3/F22.csv"
+    csvFile = CSV.File(Downloads.download(dataURL))
     dataF22 = CSV.read(csvFile, DataFrame; header=1)
-    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc3/F23-loc3.csv"
-    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc3/F23.csv"
+    csvFile = CSV.File(Downloads.download(dataURL))
     dataF23 = CSV.read(csvFile, DataFrame; header=1)
-    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc3/F31-loc3.csv"
-    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc3/F31.csv"
+    csvFile = CSV.File(Downloads.download(dataURL))
     dataF31 = CSV.read(csvFile, DataFrame; header=1)
-    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc3/F32-loc3.csv"
-    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc3/F32.csv"
+    csvFile = CSV.File(Downloads.download(dataURL))
     dataF32 = CSV.read(csvFile, DataFrame; header=1)
-    dataURL = "https://github.com/AlanFreed/FijLung.jl/data/Loc3/F33-loc3.csv"
-    csvFile = CSV.File(HTTP.get(dataURL).body)
+    dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc3/F33.csv"
+    csvFile = CSV.File(Downloads.download(dataURL))
     dataF33 = CSV.read(csvFile, DataFrame; header=1)
     # Size the arrays.
     (N, M) = size(dataF11)
     if M ≠ 2
-        msg = "Files Fij-loc3.csv have an unexpected format."
+        msg = "Files Fij.csv have an unexpected format."
         throw(ErrorException(msg))
     end
     # Create 9 scalar components for a deformation gradient.
