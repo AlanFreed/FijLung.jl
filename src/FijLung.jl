@@ -76,8 +76,7 @@ This function returns an instance of type `PhysicalFields.ArrayOfPhysicalScalars
 function t_loc1()::ArrayOfPhysicalScalars
     # Open an existing file and read its data as a DataFrames.DataFrame object.
     dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc1/F11.csv"
-    csvFile = CSV.File(Downloads.download(dataURL))
-    dataF11 = CSV.read(csvFile, DataFrame)
+    dataF11 = DataFrame(CSV.File(Downloads.download(dataURL)))
     # Create an array holding the time for each data entry.
     (N, M) = size(dataF11)
     if M ≠ 2
@@ -105,32 +104,23 @@ This function returns an instance of type `PhysicalFields.ArrayOfPhysicalTensors
 function F_loc1()::ArrayOfPhysicalTensors
     # Open existing files. Read in their data as DataFrames.DataFrame objects.
     dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc1/F11.csv"
-    csvFile = CSV.File(Downloads.download(dataURL))
-    dataF11 = CSV.read(csvFile, DataFrame; header=1)
+    dataF11 = DataFrame(CSV.File(Downloads.download(dataURL)))
     dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc1/F12.csv"
-    csvFile = CSV.File(Downloads.download(dataURL))
-    dataF12 = CSV.read(csvFile, DataFrame; header=1)
+    dataF12 = DataFrame(CSV.File(Downloads.download(dataURL)))
     dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc1/F13.csv"
-    csvFile = CSV.File(Downloads.download(dataURL))
-    dataF13 = CSV.read(csvFile, DataFrame; header=1)
+    dataF13 = DataFrame(CSV.File(Downloads.download(dataURL)))
     dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc1/F21.csv"
-    csvFile = CSV.File(Downloads.download(dataURL))
-    dataF21 = CSV.read(csvFile, DataFrame; header=1)
+    dataF21 = DataFrame(CSV.File(Downloads.download(dataURL)))
     dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc1/F22.csv"
-    csvFile = CSV.File(Downloads.download(dataURL))
-    dataF22 = CSV.read(csvFile, DataFrame; header=1)
+    dataF22 = DataFrame(CSV.File(Downloads.download(dataURL)))
     dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc1/F23.csv"
-    csvFile = CSV.File(Downloads.download(dataURL))
-    dataF23 = CSV.read(csvFile, DataFrame; header=1)
+    dataF23 = DataFrame(CSV.File(Downloads.download(dataURL)))
     dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc1/F31.csv"
-    csvFile = CSV.File(Downloads.download(dataURL))
-    dataF31 = CSV.read(csvFile, DataFrame; header=1)
+    dataF31 = DataFrame(CSV.File(Downloads.download(dataURL)))
     dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc1/F32.csv"
-    csvFile = CSV.File(Downloads.download(dataURL))
-    dataF32 = CSV.read(csvFile, DataFrame; header=1)
+    dataF32 = DataFrame(CSV.File(Downloads.download(dataURL)))
     dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc1/F33.csv"
-    csvFile = CSV.File(Downloads.download(dataURL))
-    dataF33 = CSV.read(csvFile, DataFrame; header=1)
+    dataF33 = DataFrame(CSV.File(Downloads.download(dataURL)))
     # Size the arrays.
     (N, M) = size(dataF11)
     if M ≠ 2
@@ -206,8 +196,7 @@ This function returns an instance of type `PhysicalFields.ArrayOfPhysicalScalars
 function t_loc2()::ArrayOfPhysicalScalars
     # Open an existing file and read its data as a DataFrames.DataFrame object.
     dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc2/F11.csv"
-    csvFile = CSV.File(Downloads.download(dataURL))
-    dataF11 = CSV.read(csvFile, DataFrame; header=1)
+    dataF11 = DataFrame(CSV.File(Downloads.download(dataURL)))
     # Create an array holding the time for each data entry.
     (N, M) = size(dataF11)
     if M ≠ 2
@@ -235,32 +224,23 @@ This function returns an instance of type `PhysicalFields.ArrayOfPhysicalTensors
 function F_loc2()::ArrayOfPhysicalTensors
     # Open existing files. Read in their data as DataFrames.DataFrame objects.
     dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc2/F11.csv"
-    csvFile = CSV.File(Downloads.download(dataURL))
-    dataF11 = CSV.read(csvFile, DataFrame; header=1)
+    dataF11 = DataFrame(CSV.File(Downloads.download(dataURL)))
     dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc2/F12.csv"
-    csvFile = CSV.File(Downloads.download(dataURL))
-    dataF12 = CSV.read(csvFile, DataFrame; header=1)
+    dataF12 = DataFrame(CSV.File(Downloads.download(dataURL)))
     dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc2/F13.csv"
-    csvFile = CSV.File(Downloads.download(dataURL))
-    dataF13 = CSV.read(csvFile, DataFrame; header=1)
+    dataF13 = DataFrame(CSV.File(Downloads.download(dataURL)))
     dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc2/F21.csv"
-    csvFile = CSV.File(Downloads.download(dataURL))
-    dataF21 = CSV.read(csvFile, DataFrame; header=1)
+    dataF21 = DataFrame(CSV.File(Downloads.download(dataURL)))
     dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc2/F22.csv"
-    csvFile = CSV.File(Downloads.download(dataURL))
-    dataF22 = CSV.read(csvFile, DataFrame; header=1)
+    dataF22 = DataFrame(CSV.File(Downloads.download(dataURL)))
     dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc2/F23.csv"
-    csvFile = CSV.File(Downloads.download(dataURL))
-    dataF23 = CSV.read(csvFile, DataFrame; header=1)
+    dataF23 = DataFrame(CSV.File(Downloads.download(dataURL)))
     dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc2/F31.csv"
-    csvFile = CSV.File(Downloads.download(dataURL))
-    dataF31 = CSV.read(csvFile, DataFrame; header=1)
+    dataF31 = DataFrame(CSV.File(Downloads.download(dataURL)))
     dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc2/F32.csv"
-    csvFile = CSV.File(Downloads.download(dataURL))
-    dataF32 = CSV.read(csvFile, DataFrame; header=1)
+    dataF32 = DataFrame(CSV.File(Downloads.download(dataURL)))
     dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc2/F33.csv"
-    csvFile = CSV.File(Downloads.download(dataURL))
-    dataF33 = CSV.read(csvFile, DataFrame; header=1)
+    dataF33 = DataFrame(CSV.File(Downloads.download(dataURL)))
     # Size the arrays.
     (N, M) = size(dataF11)
     if M ≠ 2
@@ -336,8 +316,7 @@ This function returns an instance of type `PhysicalFields.ArrayOfPhysicalScalars
 function t_loc3()::ArrayOfPhysicalScalars
     # Open an existing file and read its data as a DataFrames.DataFrame object.
     dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc3/F11.csv"
-    csvFile = CSV.File(Downloads.download(dataURL))
-    dataF11 = CSV.read(csvFile, DataFrame; header=1)
+    dataF11 = DataFrame(CSV.File(Downloads.download(dataURL)))
     # Create an array holding the time for each data entry.
     (N, M) = size(dataF11)
     if M ≠ 2
@@ -365,32 +344,23 @@ This function returns an instance of type `PhysicalFields.ArrayOfPhysicalTensors
 function F_loc3()::ArrayOfPhysicalTensors
     # Open existing files. Read in their data as DataFrames.DataFrame objects.
     dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc3/F11.csv"
-    csvFile = CSV.File(Downloads.download(dataURL))
-    dataF11 = CSV.read(csvFile, DataFrame; header=1)
+    dataF11 = DataFrame(CSV.File(Downloads.download(dataURL)))
     dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc3/F12.csv"
-    csvFile = CSV.File(Downloads.download(dataURL))
-    dataF12 = CSV.read(csvFile, DataFrame; header=1)
+    dataF12 = DataFrame(CSV.File(Downloads.download(dataURL)))
     dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc3/F13.csv"
-    csvFile = CSV.File(Downloads.download(dataURL))
-    dataF13 = CSV.read(csvFile, DataFrame; header=1)
+    dataF13 = DataFrame(CSV.File(Downloads.download(dataURL)))
     dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc3/F21.csv"
-    csvFile = CSV.File(Downloads.download(dataURL))
-    dataF21 = CSV.read(csvFile, DataFrame; header=1)
+    dataF21 = DataFrame(CSV.File(Downloads.download(dataURL)))
     dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc3/F22.csv"
-    csvFile = CSV.File(Downloads.download(dataURL))
-    dataF22 = CSV.read(csvFile, DataFrame; header=1)
+    dataF22 = DataFrame(CSV.File(Downloads.download(dataURL)))
     dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc3/F23.csv"
-    csvFile = CSV.File(Downloads.download(dataURL))
-    dataF23 = CSV.read(csvFile, DataFrame; header=1)
+    dataF23 = DataFrame(CSV.File(Downloads.download(dataURL)))
     dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc3/F31.csv"
-    csvFile = CSV.File(Downloads.download(dataURL))
-    dataF31 = CSV.read(csvFile, DataFrame; header=1)
+    dataF31 = DataFrame(CSV.File(Downloads.download(dataURL)))
     dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc3/F32.csv"
-    csvFile = CSV.File(Downloads.download(dataURL))
-    dataF32 = CSV.read(csvFile, DataFrame; header=1)
+    dataF32 = DataFrame(CSV.File(Downloads.download(dataURL)))
     dataURL = "https://raw.githubusercontent.com/AlanFreed/FijLung.jl/main/data/Loc3/F33.csv"
-    csvFile = CSV.File(Downloads.download(dataURL))
-    dataF33 = CSV.read(csvFile, DataFrame; header=1)
+    dataF33 = DataFrame(CSV.File(Downloads.download(dataURL)))
     # Size the arrays.
     (N, M) = size(dataF11)
     if M ≠ 2
