@@ -1,6 +1,6 @@
 #=
 Created on Sat 19 Feb 2022
-Updated on Wed 21 Jun 2023
+Updated on Fri 18 Aug 2023
 -------------------------------------------------------------------------------
 This software, like the language it is written in, is published under the MIT
 License, https://opensource.org/licenses/MIT.
@@ -48,8 +48,7 @@ import
         t_loc1,
         t_loc2,
         t_loc3,
-        SplineF,
-        newSplineF
+        SplineF
 
 export
     figures2D,
@@ -378,9 +377,9 @@ function figures2D(N::Integer, myDirPath::String)
 
     println("Now we recreate these figures using B-spline data.")
 
-    splineF1 = newSplineF(1, N)
-    splineF2 = newSplineF(2, N)
-    splineF3 = newSplineF(3, N)
+    splineF1 = SplineF(1, N)
+    splineF2 = SplineF(2, N)
+    splineF3 = SplineF(3, N)
     t1 = zeros(Float64, N)
     t2 = zeros(Float64, N)
     t3 = zeros(Float64, N)
@@ -1485,9 +1484,9 @@ function figures3D(N::Integer, myDirPath::String)
 
     println("Now we recreate these figures using B-spline data.")
 
-    splineF1 = newSplineF(1, N)
-    splineF2 = newSplineF(2, N)
-    splineF3 = newSplineF(3, N)
+    splineF1 = SplineF(1, N)
+    splineF2 = SplineF(2, N)
+    splineF3 = SplineF(3, N)
     t1 = zeros(Float64, N)
     t2 = zeros(Float64, N)
     t3 = zeros(Float64, N)
