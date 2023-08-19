@@ -1,6 +1,6 @@
-# FijLung.jl
+# FijLung
 
-This module provides the deformation gradient *F<sub>ij</sub>* at three locations in the right lung of a person suffering a trauma event that produces waves traversing and reflecting across the thorax cavity of a human caused by a high-energy impact to the rib cage from a blunt object. The 1 direction points from the chest towards the left arm. The 2 direction points from the torso towards the head along the spine. And the 3 direction points from the spine towards the breast bone.
+This module provides the deformation gradient *F<sub>ij</sub>* at three locations in the right lung of an individual who has suffered trauma  produced by waves traversing and reflecting across their thorax cavity caused by a high-energy impact to the rib cage from a blunt object. The 1 direction points from the chest towards the left arm. The 2 direction points from the torso towards the head along the spine. And the 3 direction points from the spine towards the breast bone.
 
 These data are used in a book currently being written by the author of this software, i.e.,
 
@@ -33,23 +33,23 @@ Location 1 is closest to the point of impact, while Location 3 is the furthest f
 
 ## Functions
 
-The following functions supply the raw data that are to be fit with splines.
+The following functions supply the raw data that are fit with splines. These data, which reside on [github](https::/github.com/AlanFreed/FijLung.jl), are downloaded at runtime.
 
-Returns an array of physical scalars (`PhysicalFields.ArrayOfPhysicalScalars`) and an array of physical tensors (`PhysicalFields.ArrayOfPhysicalTensors`) that hold the time *t* (in seconds) and the nine components of a deformation gradient *F<sub>ij</sub>*, respectively, at the first location sequenced over an interval of 34 milliseconds.
+The following functions return an array of physical scalars (`PhysicalFields.ArrayOfPhysicalScalars`) and an array of physical tensors (`PhysicalFields.ArrayOfPhysicalTensors`) that hold the time *t* (in seconds) and the nine components of a deformation gradient *F<sub>ij</sub>*, respectively, at the 1<sup>st</sup> location sequenced over an interval of 34 milliseconds.
 
 ```
 function t_loc1()::ArrayOfPhysicalScalars
 function F_loc1()::ArrayOfPhysicalTensors
 ```
 
-Returns an array of physical scalars (`PhysicalFields.ArrayOfPhysicalScalars`) and an array of physical tensors (`PhysicalFields.ArrayOfPhysicalTensors`) that hold the time *t* (in seconds) and the nine components of a deformation gradient *F<sub>ij</sub>*, respectively, at the second location sequenced over an interval of 34 milliseconds.
+The following functions returnsan array of physical scalars (`PhysicalFields.ArrayOfPhysicalScalars`) and an array of physical tensors (`PhysicalFields.ArrayOfPhysicalTensors`) that hold the time *t* (in seconds) and the nine components of a deformation gradient *F<sub>ij</sub>*, respectively, at the 2<sup>nd</sup> location sequenced over an interval of 34 milliseconds.
 
 ```
 function t_loc2()::ArrayOfPhysicalScalars
 function F_loc2()::ArrayOfPhysicalTensors
 ```
 
-Returns an array of physical scalars (`PhysicalFields.ArrayOfPhysicalScalars`) and an array of physical tensors (`PhysicalFields.ArrayOfPhysicalTensors`) that hold the time *t* (in seconds) and the nine components of a deformation gradient *F<sub>ij</sub>*, respectively, at the third location sequenced over an interval of 34 milliseconds.
+The following functions return an array of physical scalars (`PhysicalFields.ArrayOfPhysicalScalars`) and an array of physical tensors (`PhysicalFields.ArrayOfPhysicalTensors`) that hold the time *t* (in seconds) and the nine components of a deformation gradient *F<sub>ij</sub>*, respectively, at the 3<sup>rd</sup> location sequenced over an interval of 34 milliseconds.
 
 ```
 function t_loc3()::ArrayOfPhysicalScalars
@@ -58,7 +58,7 @@ function F_loc3()::ArrayOfPhysicalTensors
 
 ## Type
 
-This data structure is to hold data fit with splines describing the nine individual components of a deformation gradient *F<sub>ij</sub>*, plus its first d*F<sub>ij</sub>*/d*t* and second d<sup>2</sup>*F<sub>ij</sub>*/d*t*<sup>2</sup> derivatives in time.
+This data structure holds data that have been fit with splines describing the nine individual components of a deformation gradient *F<sub>ij</sub>*, plus its first d*F<sub>ij</sub>*/d*t* and second d<sup>2</sup>*F<sub>ij</sub>*/d*t*<sup>2</sup> derivatives in time.
 
 ```
 struct SplineF
@@ -73,11 +73,11 @@ end
 
 ### Constructor
 
-This function creates a new data structure that holds data for time (`SplineF.t`), the deformation gradient (`SplineF.F`), its first derivative in time (`SplineF.F′`) and its second derivative in time (`SplineF.F′′`) at a specified `location`, viz., `SplineF.loc` = 1, 2 or 3, interpolated with a density of `SplineF.N` nodes, uniformly spaced in time. There are 340 knots, or raw data points, that the B-spline fits. Typically, `nodes` is a value much greater than this, e.g., 1000. The deformation gradient `SplineF.F` comes from a cubic B-spline of these raw data. Its first derivative `SplineF.F′` is described by a quadratic B-spline. While its second derivative `SplineF.F′′` is described by a linear B-spline.
-
+The constructor used to create an instance of `SplineF` takes on the form
 ```
-function newSplineF(location::Integer, nodes::Integer)::SplineF
+splineF = SplineF(location::Integer, nodes::Integer)
 ```
+which creates a new data structure that holds data for time (`splineF.t`), the deformation gradient (`splineF.F`), its first derivative in time (`splineF.F′`) and its second derivative in time (`splineF.F′′`) at a specified `location`, viz., `splineF.loc` = 1, 2 or 3. Thses splines interpolate the raw data with a density of `splineF.N = nodes,` uniformly spaced in time. There are 340 knots, or raw data points, that the B-spline fits. Typically, the number of `nodes` is a value much greater than this, e.g., 1000. The deformation gradient `SplineF.F` comes from a cubic B-spline of these raw data. Its first derivative `SplineF.F′` is therefore described by a quadratic B-spline, while its second derivative `SplineF.F′′` is described by a linear B-spline.
 
 ### Test
 
