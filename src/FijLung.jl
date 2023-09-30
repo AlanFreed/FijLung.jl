@@ -332,7 +332,7 @@ struct SplineF
             msg = "An inadmissible location was submitted. It must be 1, 2 or 3."
             throw(ErrorException(msg))
         end
-        knots = Int64(time.e)
+        knots = Int64(time.array.len)
         # Create the various static arrays that will hold these raw data.
         rawTime = zeros(Float64, knots)
         rawF₁₁  = zeros(Float64, knots)
