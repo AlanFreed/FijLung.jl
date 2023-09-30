@@ -38,7 +38,7 @@ module testFijLung
 using
     CairoMakie,       # A pixel based figure construction.
     PhysicalFields,
-    ..FijLung
+    FijLung
 
 import
     FijLung:
