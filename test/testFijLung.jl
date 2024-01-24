@@ -97,7 +97,7 @@ function figures2D(N::Integer, myDirPath::String)
         Fᵢⱼ3 = Fᵢⱼs3[n]
         F₁₁3[n] = get(Fᵢⱼ3[2,2])
     end
-    fig = Figure(; size (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         title  = "Component 11 from 2D Deformation Gradients",
         xlabel = "time (s)",
