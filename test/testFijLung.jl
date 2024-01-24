@@ -1,35 +1,11 @@
 #=
 Created on Sat 19 Feb 2022
-Updated on Sat 30 Sep 2023
--------------------------------------------------------------------------------
-This software, like the language it is written in, is published under the MIT
-License, https://opensource.org/licenses/MIT.
-
-Copyright (c) 2022:
-Alan Freed and John Clayton
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
-IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
--------------------------------------------------------------------------------
+Updated on Wed 24 Jan 2024
 =#
 """
 Module:\n
     testFijLung\n
-This is a test module for testing the FijLung module. It exports:
+This is a test module for testing the FijLung module. It exports functions:
     figures2D
     figures3D
 """
@@ -38,7 +14,7 @@ module testFijLung
 using
     CairoMakie,       # A pixel based figure construction.
     PhysicalFields,
-    FijLung
+    ..FijLung
 
 import
     FijLung:
@@ -48,7 +24,9 @@ import
         t_loc1,
         t_loc2,
         t_loc3,
-        SplineF
+        SplineF,
+        splineAtEndPoints,
+        splineAtMidPoints
 
 export
     figures2D,
@@ -119,7 +97,7 @@ function figures2D(N::Integer, myDirPath::String)
         Fᵢⱼ3 = Fᵢⱼs3[n]
         F₁₁3[n] = get(Fᵢⱼ3[2,2])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         title  = "Component 11 from 2D Deformation Gradients",
         xlabel = "time (s)",
@@ -164,7 +142,7 @@ function figures2D(N::Integer, myDirPath::String)
         Fᵢⱼ3 = Fᵢⱼs3[n]
         F₁₂3[n] = get(Fᵢⱼ3[2,3])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         title  = "Component 12 from 2D Deformation Gradients",
         xlabel = "time (s)",
@@ -209,7 +187,7 @@ function figures2D(N::Integer, myDirPath::String)
         Fᵢⱼ3 = Fᵢⱼs3[n]
         F₂₁3[n] = get(Fᵢⱼ3[3,2])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         title  = "Component 21 from 2D Deformation Gradients",
         xlabel = "time (s)",
@@ -254,7 +232,7 @@ function figures2D(N::Integer, myDirPath::String)
         Fᵢⱼ3 = Fᵢⱼs3[n]
         F₂₂3[n] = get(Fᵢⱼ3[3,3])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         title  = "Component 22 from 2D Deformation Gradients",
         xlabel = "time (s)",
@@ -302,7 +280,7 @@ function figures2D(N::Integer, myDirPath::String)
         determinant = Fᵢⱼ3[2,2] * Fᵢⱼ3[3,3] - Fᵢⱼ3[3,2] * Fᵢⱼ3[2,3]
         detF3[n] = get(determinant) - 1
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         title  = "Determinant of 2D Deformation Gradients",
         xlabel = "time (s)",
@@ -347,7 +325,7 @@ function figures2D(N::Integer, myDirPath::String)
         Fᵢⱼ3 = Fᵢⱼs3[n]
         trF3[n] = get(Fᵢⱼ3[2,2] + Fᵢⱼ3[3,3]) - 2
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         title  = "Trace of 2D Deformation Gradients",
         xlabel = "time (s)",
@@ -377,9 +355,9 @@ function figures2D(N::Integer, myDirPath::String)
 
     println("Now we recreate these figures using B-spline data.")
 
-    splineF1 = SplineF(1, N)
-    splineF2 = SplineF(2, N)
-    splineF3 = SplineF(3, N)
+    splineF1 = splineAtEndPoints(1, N)
+    splineF2 = splineAtEndPoints(2, N)
+    splineF3 = splineAtEndPoints(3, N)
     t1 = zeros(Float64, N)
     t2 = zeros(Float64, N)
     t3 = zeros(Float64, N)
@@ -403,7 +381,7 @@ function figures2D(N::Integer, myDirPath::String)
         Fᵢⱼ3 = splineF3.F[n]
         F₁₁3[n] = get(Fᵢⱼ3[2,2])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         title  = "Component 11 from 2D Deformation Gradients",
         xlabel = "time (s)",
@@ -444,7 +422,7 @@ function figures2D(N::Integer, myDirPath::String)
         dFᵢⱼ3 = splineF3.F′[n]
         dF₁₁3[n] = get(dFᵢⱼ3[2,2])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         xlabel = "time (s)",
         ylabel = "dF₁₁/dt (s⁻¹)",
@@ -484,7 +462,7 @@ function figures2D(N::Integer, myDirPath::String)
         d²Fᵢⱼ3 = splineF3.F′′[n]
         d²F₁₁3[n] = get(d²Fᵢⱼ3[2,2])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         xlabel = "time (s)",
         ylabel = "d²F₁₁/dt² (s⁻²)",
@@ -524,7 +502,7 @@ function figures2D(N::Integer, myDirPath::String)
         Fᵢⱼ3 = splineF3.F[n]
         F₁₂3[n] = get(Fᵢⱼ3[2,3])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         title  = "Component 12 from 2D Deformation Gradients",
         xlabel = "time (s)",
@@ -564,7 +542,7 @@ function figures2D(N::Integer, myDirPath::String)
         dFᵢⱼ3 = splineF3.F′[n]
         dF₁₂3[n] = get(dFᵢⱼ3[2,3])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         xlabel = "time (s)",
         ylabel = "dF₁₂/dt (s⁻¹)",
@@ -603,7 +581,7 @@ function figures2D(N::Integer, myDirPath::String)
         d²Fᵢⱼ3 = splineF3.F′′[n]
         d²F₁₂3[n] = get(d²Fᵢⱼ3[2,3])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         xlabel = "time (s)",
         ylabel = "d²F₁₂/dt² (s⁻²)",
@@ -643,7 +621,7 @@ function figures2D(N::Integer, myDirPath::String)
         Fᵢⱼ3 = splineF3.F[n]
         F₂₁3[n] = get(Fᵢⱼ3[3,2])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         title  = "Component 21 from 2D Deformation Gradients",
         xlabel = "time (s)",
@@ -683,7 +661,7 @@ function figures2D(N::Integer, myDirPath::String)
         dFᵢⱼ3 = splineF3.F′[n]
         dF₂₁3[n] = get(dFᵢⱼ3[3,2])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         xlabel = "time (s)",
         ylabel = "dF₂₁/dt (s⁻¹)",
@@ -722,7 +700,7 @@ function figures2D(N::Integer, myDirPath::String)
         d²Fᵢⱼ3 = splineF3.F′′[n]
         d²F₂₁3[n] = get(d²Fᵢⱼ3[3,2])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         xlabel = "time (s)",
         ylabel = "d²F₂₁/dt² (s⁻²)",
@@ -762,7 +740,7 @@ function figures2D(N::Integer, myDirPath::String)
         Fᵢⱼ3 = splineF3.F[n]
         F₂₂3[n] = get(Fᵢⱼ3[3,3])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         title  = "Component 22 from 2D Deformation Gradients",
         xlabel = "time (s)",
@@ -802,7 +780,7 @@ function figures2D(N::Integer, myDirPath::String)
         dFᵢⱼ3 = splineF3.F′[n]
         dF₂₂3[n] = get(dFᵢⱼ3[3,3])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         xlabel = "time (s)",
         ylabel = "dF₂₂/dt (s⁻¹)",
@@ -841,7 +819,7 @@ function figures2D(N::Integer, myDirPath::String)
         d²Fᵢⱼ3 = splineF3.F′′[n]
         d²F₂₂3[n] = get(d²Fᵢⱼ3[3,3])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         xlabel = "time (s)",
         ylabel = "d²F₂₂/dt² (s⁻²)",
@@ -881,7 +859,7 @@ function figures2D(N::Integer, myDirPath::String)
         Fᵢⱼ3 = splineF3.F[n]
         detF3[n] = get(Fᵢⱼ3[2,2] * Fᵢⱼ3[3,3] - Fᵢⱼ3[3,2] * Fᵢⱼ3[2,3]) - 1
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         title  = "Determinant of 2D Deformation Gradients",
         xlabel = "time (s)",
@@ -922,7 +900,7 @@ function figures2D(N::Integer, myDirPath::String)
         Fᵢⱼ3 = splineF3.F[n]
         trF3[n] = get(Fᵢⱼ3[2,2] + Fᵢⱼ3[3,3]) - 2
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         title  = "Trace of 2D Deformation Gradients",
         xlabel = "time (s)",
@@ -1004,7 +982,7 @@ function figures3D(N::Integer, myDirPath::String)
         Fᵢⱼ3 = Fᵢⱼs3[n]
         F₁₁3[n] = get(Fᵢⱼ3[1,1])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         title  = "Component 11 from 3D Deformation Gradients",
         xlabel = "time (s)",
@@ -1049,7 +1027,7 @@ function figures3D(N::Integer, myDirPath::String)
         Fᵢⱼ3 = Fᵢⱼs3[n]
         F₁₂3[n] = get(Fᵢⱼ3[1,2])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         title  = "Component 12 from 3D Deformation Gradients",
         xlabel = "time (s)",
@@ -1094,7 +1072,7 @@ function figures3D(N::Integer, myDirPath::String)
         Fᵢⱼ3 = Fᵢⱼs3[n]
         F₁₃3[n] = get(Fᵢⱼ3[1,3])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         title  = "Component 13 from 3D Deformation Gradients",
         xlabel = "time (s)",
@@ -1139,7 +1117,7 @@ function figures3D(N::Integer, myDirPath::String)
         Fᵢⱼ3 = Fᵢⱼs3[n]
         F₂₁3[n] = get(Fᵢⱼ3[2,1])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         title  = "Component 21 from 3D Deformation Gradients",
         xlabel = "time (s)",
@@ -1184,7 +1162,7 @@ function figures3D(N::Integer, myDirPath::String)
         Fᵢⱼ3 = Fᵢⱼs3[n]
         F₂₂3[n] = get(Fᵢⱼ3[2,2])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         title  = "Component 22 from 3D Deformation Gradients",
         xlabel = "time (s)",
@@ -1229,7 +1207,7 @@ function figures3D(N::Integer, myDirPath::String)
         Fᵢⱼ3 = Fᵢⱼs3[n]
         F₂₃3[n] = get(Fᵢⱼ3[2,3])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         title  = "Component 23 from 3D Deformation Gradients",
         xlabel = "time (s)",
@@ -1274,7 +1252,7 @@ function figures3D(N::Integer, myDirPath::String)
         Fᵢⱼ3 = Fᵢⱼs3[n]
         F₃₁3[n] = get(Fᵢⱼ3[3,1])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         title  = "Component 31 from 3D Deformation Gradients",
         xlabel = "time (s)",
@@ -1319,7 +1297,7 @@ function figures3D(N::Integer, myDirPath::String)
         Fᵢⱼ3 = Fᵢⱼs3[n]
         F₃₂3[n] = get(Fᵢⱼ3[3,2])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         title  = "Component 32 from 3D Deformation Gradients",
         xlabel = "time (s)",
@@ -1364,7 +1342,7 @@ function figures3D(N::Integer, myDirPath::String)
         Fᵢⱼ3 = Fᵢⱼs3[n]
         F₃₃3[n] = get(Fᵢⱼ3[3,3])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         title  = "Component 33 from 3D Deformation Gradients",
         xlabel = "time (s)",
@@ -1409,7 +1387,7 @@ function figures3D(N::Integer, myDirPath::String)
         Fᵢⱼ3 = Fᵢⱼs3[n]
         detF3[n] = get(det(Fᵢⱼ3)) - 1
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         title  = "Determinant of 3D Deformation Gradients",
         xlabel = "time (s)",
@@ -1454,7 +1432,7 @@ function figures3D(N::Integer, myDirPath::String)
         Fᵢⱼ3 = Fᵢⱼs3[n]
         trF3[n] = get(tr(Fᵢⱼ3)) - 3
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         title  = "Trace of 3D Deformation Gradients",
         xlabel = "time (s)",
@@ -1484,9 +1462,9 @@ function figures3D(N::Integer, myDirPath::String)
 
     println("Now we recreate these figures using B-spline data.")
 
-    splineF1 = SplineF(1, N)
-    splineF2 = SplineF(2, N)
-    splineF3 = SplineF(3, N)
+    splineF1 = splineAtMidPoints(1, N)
+    splineF2 = splineAtMidPoints(2, N)
+    splineF3 = splineAtMidPoints(3, N)
     t1 = zeros(Float64, N)
     t2 = zeros(Float64, N)
     t3 = zeros(Float64, N)
@@ -1510,7 +1488,7 @@ function figures3D(N::Integer, myDirPath::String)
         Fᵢⱼ3 = splineF3.F[n]
         F₁₁3[n] = get(Fᵢⱼ3[1,1])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         title  = "Component 11 from 3D Deformation Gradients",
         xlabel = "time (s)",
@@ -1551,7 +1529,7 @@ function figures3D(N::Integer, myDirPath::String)
         dFᵢⱼ3 = splineF3.F′[n]
         dF₁₁3[n] = get(dFᵢⱼ3[1,1])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         xlabel = "time (s)",
         ylabel = "dF₁₁/dt (s⁻¹)",
@@ -1591,7 +1569,7 @@ function figures3D(N::Integer, myDirPath::String)
         d²Fᵢⱼ3 = splineF3.F′′[n]
         d²F₁₁3[n] = get(d²Fᵢⱼ3[1,1])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         xlabel = "time (s)",
         ylabel = "d²F₁₁/dt² (s⁻²)",
@@ -1631,7 +1609,7 @@ function figures3D(N::Integer, myDirPath::String)
         Fᵢⱼ3 = splineF3.F[n]
         F₁₂3[n] = get(Fᵢⱼ3[1,2])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         title  = "Component 12 from 3D Deformation Gradients",
         xlabel = "time (s)",
@@ -1671,7 +1649,7 @@ function figures3D(N::Integer, myDirPath::String)
         dFᵢⱼ3 = splineF3.F′[n]
         dF₁₂3[n] = get(dFᵢⱼ3[1,2])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         xlabel = "time (s)",
         ylabel = "dF₁₂/dt (s⁻¹)",
@@ -1710,7 +1688,7 @@ function figures3D(N::Integer, myDirPath::String)
         d²Fᵢⱼ3 = splineF3.F′′[n]
         d²F₁₂3[n] = get(d²Fᵢⱼ3[1,2])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         xlabel = "time (s)",
         ylabel = "d²F₁₂/dt² (s⁻²)",
@@ -1750,7 +1728,7 @@ function figures3D(N::Integer, myDirPath::String)
         Fᵢⱼ3 = splineF3.F[n]
         F₁₃3[n] = get(Fᵢⱼ3[1,3])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         title  = "Component 13 from 3D Deformation Gradients",
         xlabel = "time (s)",
@@ -1790,7 +1768,7 @@ function figures3D(N::Integer, myDirPath::String)
         dFᵢⱼ3 = splineF3.F′[n]
         dF₁₃3[n] = get(dFᵢⱼ3[1,3])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         xlabel = "time (s)",
         ylabel = "dF₁₃/dt (s⁻¹)",
@@ -1829,7 +1807,7 @@ function figures3D(N::Integer, myDirPath::String)
         d²Fᵢⱼ3 = splineF3.F′′[n]
         d²F₁₃3[n] = get(d²Fᵢⱼ3[1,3])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         xlabel = "time (s)",
         ylabel = "d²F₁₃/dt² (s⁻²)",
@@ -1869,7 +1847,7 @@ function figures3D(N::Integer, myDirPath::String)
         Fᵢⱼ3 = splineF3.F[n]
         F₂₁3[n] = get(Fᵢⱼ3[2,1])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         title  = "Component 21 from 3D Deformation Gradients",
         xlabel = "time (s)",
@@ -1909,7 +1887,7 @@ function figures3D(N::Integer, myDirPath::String)
         dFᵢⱼ3 = splineF3.F′[n]
         dF₂₁3[n] = get(dFᵢⱼ3[2,1])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         xlabel = "time (s)",
         ylabel = "dF₂₁/dt (s⁻¹)",
@@ -1948,7 +1926,7 @@ function figures3D(N::Integer, myDirPath::String)
         d²Fᵢⱼ3 = splineF3.F′′[n]
         d²F₂₁3[n] = get(d²Fᵢⱼ3[2,1])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         xlabel = "time (s)",
         ylabel = "d²F₂₁/dt² (s⁻²)",
@@ -1988,7 +1966,7 @@ function figures3D(N::Integer, myDirPath::String)
         Fᵢⱼ3 = splineF3.F[n]
         F₂₂3[n] = get(Fᵢⱼ3[2,2])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         title  = "Component 22 from 3D Deformation Gradients",
         xlabel = "time (s)",
@@ -2028,7 +2006,7 @@ function figures3D(N::Integer, myDirPath::String)
         dFᵢⱼ3 = splineF3.F′[n]
         dF₂₂3[n] = get(dFᵢⱼ3[2,2])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         xlabel = "time (s)",
         ylabel = "dF₂₂/dt (s⁻¹)",
@@ -2067,7 +2045,7 @@ function figures3D(N::Integer, myDirPath::String)
         d²Fᵢⱼ3 = splineF3.F′′[n]
         d²F₂₂3[n] = get(d²Fᵢⱼ3[2,2])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         xlabel = "time (s)",
         ylabel = "d²F₂₂/dt² (s⁻²)",
@@ -2107,7 +2085,7 @@ function figures3D(N::Integer, myDirPath::String)
         Fᵢⱼ3 = splineF3.F[n]
         F₂₃3[n] = get(Fᵢⱼ3[2,3])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         title  = "Component 23 from 3D Deformation Gradients",
         xlabel = "time (s)",
@@ -2147,7 +2125,7 @@ function figures3D(N::Integer, myDirPath::String)
         dFᵢⱼ3 = splineF3.F′[n]
         dF₂₃3[n] = get(dFᵢⱼ3[2,3])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         xlabel = "time (s)",
         ylabel = "dF₂₃/dt (s⁻¹)",
@@ -2186,7 +2164,7 @@ function figures3D(N::Integer, myDirPath::String)
         d²Fᵢⱼ3 = splineF3.F′′[n]
         d²F₂₃3[n] = get(d²Fᵢⱼ3[2,3])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         xlabel = "time (s)",
         ylabel = "d²F₂₃/dt² (s⁻²)",
@@ -2226,7 +2204,7 @@ function figures3D(N::Integer, myDirPath::String)
         Fᵢⱼ3 = splineF3.F[n]
         F₃₁3[n] = get(Fᵢⱼ3[3,1])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         title  = "Component 31 from 3D Deformation Gradients",
         xlabel = "time (s)",
@@ -2266,7 +2244,7 @@ function figures3D(N::Integer, myDirPath::String)
         dFᵢⱼ3 = splineF3.F′[n]
         dF₃₁3[n] = get(dFᵢⱼ3[3,1])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         xlabel = "time (s)",
         ylabel = "dF₃₁/dt (s⁻¹)",
@@ -2305,7 +2283,7 @@ function figures3D(N::Integer, myDirPath::String)
         d²Fᵢⱼ3 = splineF3.F′′[n]
         d²F₃₁3[n] = get(d²Fᵢⱼ3[3,1])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         xlabel = "time (s)",
         ylabel = "d²F₃₁/dt² (s⁻²)",
@@ -2345,7 +2323,7 @@ function figures3D(N::Integer, myDirPath::String)
         Fᵢⱼ3 = splineF3.F[n]
         F₃₂3[n] = get(Fᵢⱼ3[3,2])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         title  = "Component 32 from 3D Deformation Gradients",
         xlabel = "time (s)",
@@ -2385,7 +2363,7 @@ function figures3D(N::Integer, myDirPath::String)
         dFᵢⱼ3 = splineF3.F′[n]
         dF₃₂3[n] = get(dFᵢⱼ3[3,2])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         xlabel = "time (s)",
         ylabel = "dF₃₂/dt (s⁻¹)",
@@ -2424,7 +2402,7 @@ function figures3D(N::Integer, myDirPath::String)
         d²Fᵢⱼ3 = splineF3.F′′[n]
         d²F₃₂3[n] = get(d²Fᵢⱼ3[3,2])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         xlabel = "time (s)",
         ylabel = "d²F₃₂/dt² (s⁻²)",
@@ -2464,7 +2442,7 @@ function figures3D(N::Integer, myDirPath::String)
         Fᵢⱼ3 = splineF3.F[n]
         F₃₃3[n] = get(Fᵢⱼ3[3,3])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         title  = "Component 33 from 3D Deformation Gradients",
         xlabel = "time (s)",
@@ -2504,7 +2482,7 @@ function figures3D(N::Integer, myDirPath::String)
         dFᵢⱼ3 = splineF3.F′[n]
         dF₃₃3[n] = get(dFᵢⱼ3[3,3])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         xlabel = "time (s)",
         ylabel = "dF₃₃/dt (s⁻¹)",
@@ -2543,7 +2521,7 @@ function figures3D(N::Integer, myDirPath::String)
         d²Fᵢⱼ3 = splineF3.F′′[n]
         d²F₃₃3[n] = get(d²Fᵢⱼ3[3,3])
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         xlabel = "time (s)",
         ylabel = "d²F₃₃/dt² (s⁻²)",
@@ -2583,7 +2561,7 @@ function figures3D(N::Integer, myDirPath::String)
         Fᵢⱼ3 = splineF3.F[n]
         detF3[n] = get(det(Fᵢⱼ3)) - 1
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         title  = "Determinant of 3D Deformation Gradients",
         xlabel = "time (s)",
@@ -2624,7 +2602,7 @@ function figures3D(N::Integer, myDirPath::String)
         Fᵢⱼ3 = splineF3.F[n]
         trF3[n] = get(tr(Fᵢⱼ3)) - 3
     end
-    fig = Figure(resolution = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
+    fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
     ax = Axis(fig[1, 1];
         title  = "Trace of 3D Deformation Gradients",
         xlabel = "time (s)",
