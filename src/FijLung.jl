@@ -380,7 +380,7 @@ function splineAtEndPoints(location::Integer, nodes::Integer)::SplineF
         d²Fₙ = PhysicalTensor(3, 3, STRETCH_ACEL)
 
         # Time tₙ associated with the nᵗʰ end-point state.
-        tₙ = t[n]
+        tₙ = get(t[n])
 
         # Update the tensor components at the nᵗʰ end-point state.
 
@@ -515,7 +515,7 @@ function splineAtMidPoints(location::Integer, nodes::Integer)::SplineF
         d²Fₙ = PhysicalTensor(3, 3, STRETCH_ACEL)
 
         # Time tₙ associated with the nᵗʰ mid-point state.
-        tₙ = t[n]
+        tₙ = get(t[n])
 
         # Update the tensor components at the nᵗʰ mid-point state.
 
