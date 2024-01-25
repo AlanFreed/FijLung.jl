@@ -291,6 +291,12 @@ struct SplineF
     F::ArrayOfPhysicalTensors     # F         Their deformation gradients.
     F′::ArrayOfPhysicalTensors    # dF/dt     Their first derivatives in time.
     F′′::ArrayOfPhysicalTensors   # d²F/dt²   Their second derivatives in time.
+
+    # Internal Constructor
+    function SplineF(loc::Integer, N::Integer, t::ArrayOfPhysicalScalars, F::ArrayOfPhysicalTensors, F′::ArrayOfPhysicalTensors, F′′::ArrayOfPhysicalTensors)
+
+        new(loc, N, t, F, F′, F′′)
+    end
 end # SplineF
 
 # External Constructors
@@ -364,7 +370,7 @@ function splineAtEndPoints(location::Integer, nodes::Integer)::SplineF
     F′′ = ArrayOfPhysicalTensors(nodes+1, 3, 3, STRETCH_ACEL)
 
     # Establish the time increment between adjacent nodes.
-    dt = (time[knots] = time[1]) / nodes
+    dt = (time[knots] - time[1]) / nodes
 
     # Populate the time array with end-point times.
     t[1] = time[1]          # the initial time
@@ -498,7 +504,7 @@ function splineAtMidPoints(location::Integer, nodes::Integer)::SplineF
     F′′ = ArrayOfPhysicalTensors(nodes+1, 3, 3, STRETCH_ACEL)
 
     # Establish the time increment between adjacent nodes.
-    dt = (time[knots] = time[1]) / nodes
+    dt = (time[knots] - time[1]) / nodes
 
     # Populate the time array with mid-point times.
     t[1] = time[1]          # the initial time
