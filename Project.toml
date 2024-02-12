@@ -1,7 +1,7 @@
 name = "FijLung"
 uuid = "ebee446b-172f-49a9-b275-e96df6489ead"
 authors = ["AlanFreed <alan.d.freed@proton.me>"]
-version = "1.0.1-2"
+version = "1.0.2"
 
 [deps]
 BSplineKit = "093aae92-e908-43d7-9660-e50ee39d5a0a"
@@ -9,6 +9,7 @@ CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
 CairoMakie = "13f3f980-e62b-5c42-98c6-ff1f3baf88f0"
 DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
 Downloads = "f43a241f-c20a-4ad4-852c-f6b1247861c6"
+LaplaceKinematics = "9f71644a-9970-46c9-94ba-70c89ea29c7d"
 PhysicalFields = "ecb0663d-aa47-424e-b5ff-03a0dca9671a"
 
 [compat]

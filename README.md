@@ -88,6 +88,10 @@ An example of how these data can be used, e.g., plotted, can be found in the *te
 
 # Version History
 
+## Version 1.0.2
+
+Directly imported the needed funtions supplied by BSplineKit instead of just a general include via using.
+
 ## Version 1.0.1
 
 Splined data are now supplied for both mid-point and end-point nodal locations.
