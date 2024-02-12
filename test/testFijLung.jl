@@ -1,6 +1,6 @@
 #=
 Created on Sat 19 Feb 2022
-Updated on Wed 24 Jan 2024
+Updated on Mon 12 Feb 2024
 =#
 """
 Module:\n
@@ -13,8 +13,7 @@ module testFijLung
 
 using
     CairoMakie,       # A pixel based figure construction.
-    PhysicalFields,
-    ..FijLung
+    PhysicalFields
 
 import
     FijLung:
@@ -358,10 +357,10 @@ function figures2D(N::Integer, myDirPath::String)
     splineF1 = splineAtEndPoints(1, N)
     splineF2 = splineAtEndPoints(2, N)
     splineF3 = splineAtEndPoints(3, N)
-    t1 = zeros(Float64, N+1)
-    t2 = zeros(Float64, N+1)
-    t3 = zeros(Float64, N+1)
-    for n in 1:N+1
+    t1 = zeros(Float64, N)
+    t2 = zeros(Float64, N)
+    t3 = zeros(Float64, N)
+    for n in 1:N
         t1[n] = get(splineF1.t[n])
         t2[n] = get(splineF2.t[n])
         t3[n] = get(splineF3.t[n])
@@ -370,10 +369,10 @@ function figures2D(N::Integer, myDirPath::String)
 
     # Create figures for F₁₁ and its derivatives.
     println("Working on figure F₁₁ for 2D.")
-    F₁₁1 = zeros(Float64, N+1)
-    F₁₁2 = zeros(Float64, N+1)
-    F₁₁3 = zeros(Float64, N+1)
-    for n in 1:N+1
+    F₁₁1 = zeros(Float64, N)
+    F₁₁2 = zeros(Float64, N)
+    F₁₁3 = zeros(Float64, N)
+    for n in 1:N
         Fᵢⱼ1 = splineF1.F[n]
         F₁₁1[n] = get(Fᵢⱼ1[2,2])
         Fᵢⱼ2 = splineF2.F[n]
@@ -411,10 +410,10 @@ function figures2D(N::Integer, myDirPath::String)
 
     # Create a figure for dF₁₁/dt.
     println("Working on figure dF₁₁/dt for 2D.")
-    dF₁₁1 = zeros(Float64, N+1)
-    dF₁₁2 = zeros(Float64, N+1)
-    dF₁₁3 = zeros(Float64, N+1)
-    for n in 1:N+1
+    dF₁₁1 = zeros(Float64, N)
+    dF₁₁2 = zeros(Float64, N)
+    dF₁₁3 = zeros(Float64, N)
+    for n in 1:N
         dFᵢⱼ1 = splineF1.F′[n]
         dF₁₁1[n] = get(dFᵢⱼ1[2,2])
         dFᵢⱼ2 = splineF2.F′[n]
@@ -451,10 +450,10 @@ function figures2D(N::Integer, myDirPath::String)
 
     # Create a figure for d²F₁₁/dt².
     println("Working on figure d²F₁₁/dt² for 2D.")
-    d²F₁₁1 = zeros(Float64, N+1)
-    d²F₁₁2 = zeros(Float64, N+1)
-    d²F₁₁3 = zeros(Float64, N+1)
-    for n in 1:N+1
+    d²F₁₁1 = zeros(Float64, N)
+    d²F₁₁2 = zeros(Float64, N)
+    d²F₁₁3 = zeros(Float64, N)
+    for n in 1:N
         d²Fᵢⱼ1 = splineF1.F′′[n]
         d²F₁₁1[n] = get(d²Fᵢⱼ1[2,2])
         d²Fᵢⱼ2 = splineF2.F′′[n]
@@ -491,10 +490,10 @@ function figures2D(N::Integer, myDirPath::String)
 
     # Create figures for F₁₂ and its derivatives.
     println("Working on figure F₁₂ for 2D.")
-    F₁₂1 = zeros(Float64, N+1)
-    F₁₂2 = zeros(Float64, N+1)
-    F₁₂3 = zeros(Float64, N+1)
-    for n in 1:N+1
+    F₁₂1 = zeros(Float64, N)
+    F₁₂2 = zeros(Float64, N)
+    F₁₂3 = zeros(Float64, N)
+    for n in 1:N
         Fᵢⱼ1 = splineF1.F[n]
         F₁₂1[n] = get(Fᵢⱼ1[2,3])
         Fᵢⱼ2 = splineF2.F[n]
@@ -531,10 +530,10 @@ function figures2D(N::Integer, myDirPath::String)
     save(myPath, fig)
 
     println("Working on figure dF₁₂/dt for 2D.")
-    dF₁₂1 = zeros(Float64, N+1)
-    dF₁₂2 = zeros(Float64, N+1)
-    dF₁₂3 = zeros(Float64, N+1)
-    for n in 1:N+1
+    dF₁₂1 = zeros(Float64, N)
+    dF₁₂2 = zeros(Float64, N)
+    dF₁₂3 = zeros(Float64, N)
+    for n in 1:N
         dFᵢⱼ1 = splineF1.F′[n]
         dF₁₂1[n] = get(dFᵢⱼ1[2,3])
         dFᵢⱼ2 = splineF2.F′[n]
@@ -570,10 +569,10 @@ function figures2D(N::Integer, myDirPath::String)
     save(myPath, fig)
 
     println("Working on figure d²F₁₂/dt² for 2D.")
-    d²F₁₂1 = zeros(Float64, N+1)
-    d²F₁₂2 = zeros(Float64, N+1)
-    d²F₁₂3 = zeros(Float64, N+1)
-    for n in 1:N+1
+    d²F₁₂1 = zeros(Float64, N)
+    d²F₁₂2 = zeros(Float64, N)
+    d²F₁₂3 = zeros(Float64, N)
+    for n in 1:N
         d²Fᵢⱼ1 = splineF1.F′′[n]
         d²F₁₂1[n] = get(d²Fᵢⱼ1[2,3])
         d²Fᵢⱼ2 = splineF2.F′′[n]
@@ -610,10 +609,10 @@ function figures2D(N::Integer, myDirPath::String)
 
     # Create a figure for F₂₁.
     println("Working on figure F₂₁ for 2D.")
-    F₂₁1 = zeros(Float64, N+1)
-    F₂₁2 = zeros(Float64, N+1)
-    F₂₁3 = zeros(Float64, N+1)
-    for n in 1:N+1
+    F₂₁1 = zeros(Float64, N)
+    F₂₁2 = zeros(Float64, N)
+    F₂₁3 = zeros(Float64, N)
+    for n in 1:N
         Fᵢⱼ1 = splineF1.F[n]
         F₂₁1[n] = get(Fᵢⱼ1[3,2])
         Fᵢⱼ2 = splineF2.F[n]
@@ -650,10 +649,10 @@ function figures2D(N::Integer, myDirPath::String)
     save(myPath, fig)
 
     println("Working on figure dF₂₁/dt for 2D.")
-    dF₂₁1 = zeros(Float64, N+1)
-    dF₂₁2 = zeros(Float64, N+1)
-    dF₂₁3 = zeros(Float64, N+1)
-    for n in 1:N+1
+    dF₂₁1 = zeros(Float64, N)
+    dF₂₁2 = zeros(Float64, N)
+    dF₂₁3 = zeros(Float64, N)
+    for n in 1:N
         dFᵢⱼ1 = splineF1.F′[n]
         dF₂₁1[n] = get(dFᵢⱼ1[3,2])
         dFᵢⱼ2 = splineF2.F′[n]
@@ -689,10 +688,10 @@ function figures2D(N::Integer, myDirPath::String)
     save(myPath, fig)
 
     println("Working on figure d²F₂₁/dt² for 2D.")
-    d²F₂₁1 = zeros(Float64, N+1)
-    d²F₂₁2 = zeros(Float64, N+1)
-    d²F₂₁3 = zeros(Float64, N+1)
-    for n in 1:N+1
+    d²F₂₁1 = zeros(Float64, N)
+    d²F₂₁2 = zeros(Float64, N)
+    d²F₂₁3 = zeros(Float64, N)
+    for n in 1:N
         d²Fᵢⱼ1 = splineF1.F′′[n]
         d²F₂₁1[n] = get(d²Fᵢⱼ1[3,2])
         d²Fᵢⱼ2 = splineF2.F′′[n]
@@ -729,10 +728,10 @@ function figures2D(N::Integer, myDirPath::String)
 
     # Create figures for F₂₂ and its derivatives.
     println("Working on figure F₂₂ for 2D.")
-    F₂₂1 = zeros(Float64, N+1)
-    F₂₂2 = zeros(Float64, N+1)
-    F₂₂3 = zeros(Float64, N+1)
-    for n in 1:N+1
+    F₂₂1 = zeros(Float64, N)
+    F₂₂2 = zeros(Float64, N)
+    F₂₂3 = zeros(Float64, N)
+    for n in 1:N
         Fᵢⱼ1 = splineF1.F[n]
         F₂₂1[n] = get(Fᵢⱼ1[3,3])
         Fᵢⱼ2 = splineF2.F[n]
@@ -769,10 +768,10 @@ function figures2D(N::Integer, myDirPath::String)
     save(myPath, fig)
 
     println("Working on figure dF₂₂/dt for 2D.")
-    dF₂₂1 = zeros(Float64, N+1)
-    dF₂₂2 = zeros(Float64, N+1)
-    dF₂₂3 = zeros(Float64, N+1)
-    for n in 1:N+1
+    dF₂₂1 = zeros(Float64, N)
+    dF₂₂2 = zeros(Float64, N)
+    dF₂₂3 = zeros(Float64, N)
+    for n in 1:N
         dFᵢⱼ1 = splineF1.F′[n]
         dF₂₂1[n] = get(dFᵢⱼ1[3,3])
         dFᵢⱼ2 = splineF2.F′[n]
@@ -808,10 +807,10 @@ function figures2D(N::Integer, myDirPath::String)
     save(myPath, fig)
 
     println("Working on figure d²F₂₂/dt for 2D.")
-    d²F₂₂1 = zeros(Float64, N+1)
-    d²F₂₂2 = zeros(Float64, N+1)
-    d²F₂₂3 = zeros(Float64, N+1)
-    for n in 1:N+1
+    d²F₂₂1 = zeros(Float64, N)
+    d²F₂₂2 = zeros(Float64, N)
+    d²F₂₂3 = zeros(Float64, N)
+    for n in 1:N
         d²Fᵢⱼ1 = splineF1.F′′[n]
         d²F₂₂1[n] = get(d²Fᵢⱼ1[3,3])
         d²Fᵢⱼ2 = splineF2.F′′[n]
@@ -848,10 +847,10 @@ function figures2D(N::Integer, myDirPath::String)
 
     # Create a figure for det(F).
     println("Working on figure det(F) for 2D.")
-    detF1 = zeros(Float64, N+1)
-    detF2 = zeros(Float64, N+1)
-    detF3 = zeros(Float64, N+1)
-    for n in 1:N+1
+    detF1 = zeros(Float64, N)
+    detF2 = zeros(Float64, N)
+    detF3 = zeros(Float64, N)
+    for n in 1:N
         Fᵢⱼ1 = splineF1.F[n]
         detF1[n] = get(Fᵢⱼ1[2,2] * Fᵢⱼ1[3,3] - Fᵢⱼ1[3,2] * Fᵢⱼ1[2,3]) - 1
         Fᵢⱼ2 = splineF2.F[n]
@@ -889,10 +888,10 @@ function figures2D(N::Integer, myDirPath::String)
 
     # Create a figure for tr(F).
     println("Working on figure tr(F) for 2D.")
-    trF1 = zeros(Float64, N+1)
-    trF2 = zeros(Float64, N+1)
-    trF3 = zeros(Float64, N+1)
-    for n in 1:N+1
+    trF1 = zeros(Float64, N)
+    trF2 = zeros(Float64, N)
+    trF3 = zeros(Float64, N)
+    for n in 1:N
         Fᵢⱼ1 = splineF1.F[n]
         trF1[n] = get(Fᵢⱼ1[2,2] + Fᵢⱼ1[3,3]) - 2
         Fᵢⱼ2 = splineF2.F[n]
@@ -1465,10 +1464,10 @@ function figures3D(N::Integer, myDirPath::String)
     splineF1 = splineAtMidPoints(1, N)
     splineF2 = splineAtMidPoints(2, N)
     splineF3 = splineAtMidPoints(3, N)
-    t1 = zeros(Float64, N+1)
-    t2 = zeros(Float64, N+1)
-    t3 = zeros(Float64, N+1)
-    for n in 1:N+1
+    t1 = zeros(Float64, N)
+    t2 = zeros(Float64, N)
+    t3 = zeros(Float64, N)
+    for n in 1:N
         t1[n] = get(splineF1.t[n])
         t2[n] = get(splineF2.t[n])
         t3[n] = get(splineF3.t[n])
@@ -1477,10 +1476,10 @@ function figures3D(N::Integer, myDirPath::String)
 
     # Create figures for F₁₁ and its derivatives.
     println("Working on figure F₁₁ for 3D.")
-    F₁₁1 = zeros(Float64, N+1)
-    F₁₁2 = zeros(Float64, N+1)
-    F₁₁3 = zeros(Float64, N+1)
-    for n in 1:N+1
+    F₁₁1 = zeros(Float64, N)
+    F₁₁2 = zeros(Float64, N)
+    F₁₁3 = zeros(Float64, N)
+    for n in 1:N
         Fᵢⱼ1 = splineF1.F[n]
         F₁₁1[n] = get(Fᵢⱼ1[1,1])
         Fᵢⱼ2 = splineF2.F[n]
@@ -1518,10 +1517,10 @@ function figures3D(N::Integer, myDirPath::String)
 
     # Create a figure for dF₁₁/dt.
     println("Working on figure dF₁₁/dt for 3D.")
-    dF₁₁1 = zeros(Float64, N+1)
-    dF₁₁2 = zeros(Float64, N+1)
-    dF₁₁3 = zeros(Float64, N+1)
-    for n in 1:N+1
+    dF₁₁1 = zeros(Float64, N)
+    dF₁₁2 = zeros(Float64, N)
+    dF₁₁3 = zeros(Float64, N)
+    for n in 1:N
         dFᵢⱼ1 = splineF1.F′[n]
         dF₁₁1[n] = get(dFᵢⱼ1[1,1])
         dFᵢⱼ2 = splineF2.F′[n]
@@ -1558,10 +1557,10 @@ function figures3D(N::Integer, myDirPath::String)
 
     # Create a figure for d²F₁₁/dt².
     println("Working on figure d²F₁₁/dt² for 3D.")
-    d²F₁₁1 = zeros(Float64, N+1)
-    d²F₁₁2 = zeros(Float64, N+1)
-    d²F₁₁3 = zeros(Float64, N+1)
-    for n in 1:N+1
+    d²F₁₁1 = zeros(Float64, N)
+    d²F₁₁2 = zeros(Float64, N)
+    d²F₁₁3 = zeros(Float64, N)
+    for n in 1:N
         d²Fᵢⱼ1 = splineF1.F′′[n]
         d²F₁₁1[n] = get(d²Fᵢⱼ1[1,1])
         d²Fᵢⱼ2 = splineF2.F′′[n]
@@ -1598,10 +1597,10 @@ function figures3D(N::Integer, myDirPath::String)
 
     # Create figures for F₁₂ and its derivatives.
     println("Working on figure F₁₂ for 3D.")
-    F₁₂1 = zeros(Float64, N+1)
-    F₁₂2 = zeros(Float64, N+1)
-    F₁₂3 = zeros(Float64, N+1)
-    for n in 1:N+1
+    F₁₂1 = zeros(Float64, N)
+    F₁₂2 = zeros(Float64, N)
+    F₁₂3 = zeros(Float64, N)
+    for n in 1:N
         Fᵢⱼ1 = splineF1.F[n]
         F₁₂1[n] = get(Fᵢⱼ1[1,2])
         Fᵢⱼ2 = splineF2.F[n]
@@ -1638,10 +1637,10 @@ function figures3D(N::Integer, myDirPath::String)
     save(myPath, fig)
 
     println("Working on figure dF₁₂/dt for 3D.")
-    dF₁₂1 = zeros(Float64, N+1)
-    dF₁₂2 = zeros(Float64, N+1)
-    dF₁₂3 = zeros(Float64, N+1)
-    for n in 1:N+1
+    dF₁₂1 = zeros(Float64, N)
+    dF₁₂2 = zeros(Float64, N)
+    dF₁₂3 = zeros(Float64, N)
+    for n in 1:N
         dFᵢⱼ1 = splineF1.F′[n]
         dF₁₂1[n] = get(dFᵢⱼ1[1,2])
         dFᵢⱼ2 = splineF2.F′[n]
@@ -1677,10 +1676,10 @@ function figures3D(N::Integer, myDirPath::String)
     save(myPath, fig)
 
     println("Working on figure d²F₁₂/dt² for 3D.")
-    d²F₁₂1 = zeros(Float64, N+1)
-    d²F₁₂2 = zeros(Float64, N+1)
-    d²F₁₂3 = zeros(Float64, N+1)
-    for n in 1:N+1
+    d²F₁₂1 = zeros(Float64, N)
+    d²F₁₂2 = zeros(Float64, N)
+    d²F₁₂3 = zeros(Float64, N)
+    for n in 1:N
         d²Fᵢⱼ1 = splineF1.F′′[n]
         d²F₁₂1[n] = get(d²Fᵢⱼ1[1,2])
         d²Fᵢⱼ2 = splineF2.F′′[n]
@@ -1717,10 +1716,10 @@ function figures3D(N::Integer, myDirPath::String)
 
     # Create figures for F₁₃ and its derivatives.
     println("Working on figure F₁₃ for 3D.")
-    F₁₃1 = zeros(Float64, N+1)
-    F₁₃2 = zeros(Float64, N+1)
-    F₁₃3 = zeros(Float64, N+1)
-    for n in 1:N+1
+    F₁₃1 = zeros(Float64, N)
+    F₁₃2 = zeros(Float64, N)
+    F₁₃3 = zeros(Float64, N)
+    for n in 1:N
         Fᵢⱼ1 = splineF1.F[n]
         F₁₃1[n] = get(Fᵢⱼ1[1,3])
         Fᵢⱼ2 = splineF2.F[n]
@@ -1757,10 +1756,10 @@ function figures3D(N::Integer, myDirPath::String)
     save(myPath, fig)
 
     println("Working on figure dF₁₃/dt for 3D.")
-    dF₁₃1 = zeros(Float64, N+1)
-    dF₁₃2 = zeros(Float64, N+1)
-    dF₁₃3 = zeros(Float64, N+1)
-    for n in 1:N+1
+    dF₁₃1 = zeros(Float64, N)
+    dF₁₃2 = zeros(Float64, N)
+    dF₁₃3 = zeros(Float64, N)
+    for n in 1:N
         dFᵢⱼ1 = splineF1.F′[n]
         dF₁₃1[n] = get(dFᵢⱼ1[1,3])
         dFᵢⱼ2 = splineF2.F′[n]
@@ -1796,10 +1795,10 @@ function figures3D(N::Integer, myDirPath::String)
     save(myPath, fig)
 
     println("Working on figure d²F₁₃/dt² for 3D.")
-    d²F₁₃1 = zeros(Float64, N+1)
-    d²F₁₃2 = zeros(Float64, N+1)
-    d²F₁₃3 = zeros(Float64, N+1)
-    for n in 1:N+1
+    d²F₁₃1 = zeros(Float64, N)
+    d²F₁₃2 = zeros(Float64, N)
+    d²F₁₃3 = zeros(Float64, N)
+    for n in 1:N
         d²Fᵢⱼ1 = splineF1.F′′[n]
         d²F₁₃1[n] = get(d²Fᵢⱼ1[1,3])
         d²Fᵢⱼ2 = splineF2.F′′[n]
@@ -1836,10 +1835,10 @@ function figures3D(N::Integer, myDirPath::String)
 
     # Create a figure for F₂₁.
     println("Working on figure F₂₁ for 3D.")
-    F₂₁1 = zeros(Float64, N+1)
-    F₂₁2 = zeros(Float64, N+1)
-    F₂₁3 = zeros(Float64, N+1)
-    for n in 1:N+1
+    F₂₁1 = zeros(Float64, N)
+    F₂₁2 = zeros(Float64, N)
+    F₂₁3 = zeros(Float64, N)
+    for n in 1:N
         Fᵢⱼ1 = splineF1.F[n]
         F₂₁1[n] = get(Fᵢⱼ1[2,1])
         Fᵢⱼ2 = splineF2.F[n]
@@ -1876,10 +1875,10 @@ function figures3D(N::Integer, myDirPath::String)
     save(myPath, fig)
 
     println("Working on figure dF₂₁/dt for 3D.")
-    dF₂₁1 = zeros(Float64, N+1)
-    dF₂₁2 = zeros(Float64, N+1)
-    dF₂₁3 = zeros(Float64, N+1)
-    for n in 1:N+1
+    dF₂₁1 = zeros(Float64, N)
+    dF₂₁2 = zeros(Float64, N)
+    dF₂₁3 = zeros(Float64, N)
+    for n in 1:N
         dFᵢⱼ1 = splineF1.F′[n]
         dF₂₁1[n] = get(dFᵢⱼ1[2,1])
         dFᵢⱼ2 = splineF2.F′[n]
@@ -1915,10 +1914,10 @@ function figures3D(N::Integer, myDirPath::String)
     save(myPath, fig)
 
     println("Working on figure d²F₂₁/dt² for 3D.")
-    d²F₂₁1 = zeros(Float64, N+1)
-    d²F₂₁2 = zeros(Float64, N+1)
-    d²F₂₁3 = zeros(Float64, N+1)
-    for n in 1:N+1
+    d²F₂₁1 = zeros(Float64, N)
+    d²F₂₁2 = zeros(Float64, N)
+    d²F₂₁3 = zeros(Float64, N)
+    for n in 1:N
         d²Fᵢⱼ1 = splineF1.F′′[n]
         d²F₂₁1[n] = get(d²Fᵢⱼ1[2,1])
         d²Fᵢⱼ2 = splineF2.F′′[n]
@@ -1955,10 +1954,10 @@ function figures3D(N::Integer, myDirPath::String)
 
     # Create figures for F₂₂ and its derivatives.
     println("Working on figure F₂₂ for 3D.")
-    F₂₂1 = zeros(Float64, N+1)
-    F₂₂2 = zeros(Float64, N+1)
-    F₂₂3 = zeros(Float64, N+1)
-    for n in 1:N+1
+    F₂₂1 = zeros(Float64, N)
+    F₂₂2 = zeros(Float64, N)
+    F₂₂3 = zeros(Float64, N)
+    for n in 1:N
         Fᵢⱼ1 = splineF1.F[n]
         F₂₂1[n] = get(Fᵢⱼ1[2,2])
         Fᵢⱼ2 = splineF2.F[n]
@@ -1995,10 +1994,10 @@ function figures3D(N::Integer, myDirPath::String)
     save(myPath, fig)
 
     println("Working on figure dF₂₂/dt for 3D.")
-    dF₂₂1 = zeros(Float64, N+1)
-    dF₂₂2 = zeros(Float64, N+1)
-    dF₂₂3 = zeros(Float64, N+1)
-    for n in 1:N+1
+    dF₂₂1 = zeros(Float64, N)
+    dF₂₂2 = zeros(Float64, N)
+    dF₂₂3 = zeros(Float64, N)
+    for n in 1:N
         dFᵢⱼ1 = splineF1.F′[n]
         dF₂₂1[n] = get(dFᵢⱼ1[2,2])
         dFᵢⱼ2 = splineF2.F′[n]
@@ -2034,10 +2033,10 @@ function figures3D(N::Integer, myDirPath::String)
     save(myPath, fig)
 
     println("Working on figure d²F₂₂/dt for 3D.")
-    d²F₂₂1 = zeros(Float64, N+1)
-    d²F₂₂2 = zeros(Float64, N+1)
-    d²F₂₂3 = zeros(Float64, N+1)
-    for n in 1:N+1
+    d²F₂₂1 = zeros(Float64, N)
+    d²F₂₂2 = zeros(Float64, N)
+    d²F₂₂3 = zeros(Float64, N)
+    for n in 1:N
         d²Fᵢⱼ1 = splineF1.F′′[n]
         d²F₂₂1[n] = get(d²Fᵢⱼ1[2,2])
         d²Fᵢⱼ2 = splineF2.F′′[n]
@@ -2074,10 +2073,10 @@ function figures3D(N::Integer, myDirPath::String)
 
     # Create figures for F₂₃ and its derivatives.
     println("Working on figure F₂₃ for 3D.")
-    F₂₃1 = zeros(Float64, N+1)
-    F₂₃2 = zeros(Float64, N+1)
-    F₂₃3 = zeros(Float64, N+1)
-    for n in 1:N+1
+    F₂₃1 = zeros(Float64, N)
+    F₂₃2 = zeros(Float64, N)
+    F₂₃3 = zeros(Float64, N)
+    for n in 1:N
         Fᵢⱼ1 = splineF1.F[n]
         F₂₃1[n] = get(Fᵢⱼ1[2,3])
         Fᵢⱼ2 = splineF2.F[n]
@@ -2114,10 +2113,10 @@ function figures3D(N::Integer, myDirPath::String)
     save(myPath, fig)
 
     println("Working on figure dF₂₃/dt for 3D.")
-    dF₂₃1 = zeros(Float64, N+1)
-    dF₂₃2 = zeros(Float64, N+1)
-    dF₂₃3 = zeros(Float64, N+1)
-    for n in 1:N+1
+    dF₂₃1 = zeros(Float64, N)
+    dF₂₃2 = zeros(Float64, N)
+    dF₂₃3 = zeros(Float64, N)
+    for n in 1:N
         dFᵢⱼ1 = splineF1.F′[n]
         dF₂₃1[n] = get(dFᵢⱼ1[2,3])
         dFᵢⱼ2 = splineF2.F′[n]
@@ -2153,10 +2152,10 @@ function figures3D(N::Integer, myDirPath::String)
     save(myPath, fig)
 
     println("Working on figure d²F₂₃/dt for 3D.")
-    d²F₂₃1 = zeros(Float64, N+1)
-    d²F₂₃2 = zeros(Float64, N+1)
-    d²F₂₃3 = zeros(Float64, N+1)
-    for n in 1:N+1
+    d²F₂₃1 = zeros(Float64, N)
+    d²F₂₃2 = zeros(Float64, N)
+    d²F₂₃3 = zeros(Float64, N)
+    for n in 1:N
         d²Fᵢⱼ1 = splineF1.F′′[n]
         d²F₂₃1[n] = get(d²Fᵢⱼ1[2,3])
         d²Fᵢⱼ2 = splineF2.F′′[n]
@@ -2193,10 +2192,10 @@ function figures3D(N::Integer, myDirPath::String)
 
     # Create a figure for F₃₁.
     println("Working on figure F₃₁ for 3D.")
-    F₃₁1 = zeros(Float64, N+1)
-    F₃₁2 = zeros(Float64, N+1)
-    F₃₁3 = zeros(Float64, N+1)
-    for n in 1:N+1
+    F₃₁1 = zeros(Float64, N)
+    F₃₁2 = zeros(Float64, N)
+    F₃₁3 = zeros(Float64, N)
+    for n in 1:N
         Fᵢⱼ1 = splineF1.F[n]
         F₃₁1[n] = get(Fᵢⱼ1[3,1])
         Fᵢⱼ2 = splineF2.F[n]
@@ -2233,10 +2232,10 @@ function figures3D(N::Integer, myDirPath::String)
     save(myPath, fig)
 
     println("Working on figure dF₃₁/dt for 3D.")
-    dF₃₁1 = zeros(Float64, N+1)
-    dF₃₁2 = zeros(Float64, N+1)
-    dF₃₁3 = zeros(Float64, N+1)
-    for n in 1:N+1
+    dF₃₁1 = zeros(Float64, N)
+    dF₃₁2 = zeros(Float64, N)
+    dF₃₁3 = zeros(Float64, N)
+    for n in 1:N
         dFᵢⱼ1 = splineF1.F′[n]
         dF₃₁1[n] = get(dFᵢⱼ1[3,1])
         dFᵢⱼ2 = splineF2.F′[n]
@@ -2272,10 +2271,10 @@ function figures3D(N::Integer, myDirPath::String)
     save(myPath, fig)
 
     println("Working on figure d²F₃₁/dt² for 3D.")
-    d²F₃₁1 = zeros(Float64, N+1)
-    d²F₃₁2 = zeros(Float64, N+1)
-    d²F₃₁3 = zeros(Float64, N+1)
-    for n in 1:N+1
+    d²F₃₁1 = zeros(Float64, N)
+    d²F₃₁2 = zeros(Float64, N)
+    d²F₃₁3 = zeros(Float64, N)
+    for n in 1:N
         d²Fᵢⱼ1 = splineF1.F′′[n]
         d²F₃₁1[n] = get(d²Fᵢⱼ1[3,1])
         d²Fᵢⱼ2 = splineF2.F′′[n]
@@ -2312,10 +2311,10 @@ function figures3D(N::Integer, myDirPath::String)
 
     # Create figures for F₃₂ and its derivatives.
     println("Working on figure F₃₂ for 3D.")
-    F₃₂1 = zeros(Float64, N+1)
-    F₃₂2 = zeros(Float64, N+1)
-    F₃₂3 = zeros(Float64, N+1)
-    for n in 1:N+1
+    F₃₂1 = zeros(Float64, N)
+    F₃₂2 = zeros(Float64, N)
+    F₃₂3 = zeros(Float64, N)
+    for n in 1:N
         Fᵢⱼ1 = splineF1.F[n]
         F₃₂1[n] = get(Fᵢⱼ1[3,2])
         Fᵢⱼ2 = splineF2.F[n]
@@ -2352,10 +2351,10 @@ function figures3D(N::Integer, myDirPath::String)
     save(myPath, fig)
 
     println("Working on figure dF₃₂/dt for 3D.")
-    dF₃₂1 = zeros(Float64, N+1)
-    dF₃₂2 = zeros(Float64, N+1)
-    dF₃₂3 = zeros(Float64, N+1)
-    for n in 1:N+1
+    dF₃₂1 = zeros(Float64, N)
+    dF₃₂2 = zeros(Float64, N)
+    dF₃₂3 = zeros(Float64, N)
+    for n in 1:N
         dFᵢⱼ1 = splineF1.F′[n]
         dF₃₂1[n] = get(dFᵢⱼ1[3,2])
         dFᵢⱼ2 = splineF2.F′[n]
@@ -2391,10 +2390,10 @@ function figures3D(N::Integer, myDirPath::String)
     save(myPath, fig)
 
     println("Working on figure d²F₃₂/dt for 3D.")
-    d²F₃₂1 = zeros(Float64, N+1)
-    d²F₃₂2 = zeros(Float64, N+1)
-    d²F₃₂3 = zeros(Float64, N+1)
-    for n in 1:N+1
+    d²F₃₂1 = zeros(Float64, N)
+    d²F₃₂2 = zeros(Float64, N)
+    d²F₃₂3 = zeros(Float64, N)
+    for n in 1:N
         d²Fᵢⱼ1 = splineF1.F′′[n]
         d²F₃₂1[n] = get(d²Fᵢⱼ1[3,2])
         d²Fᵢⱼ2 = splineF2.F′′[n]
@@ -2431,10 +2430,10 @@ function figures3D(N::Integer, myDirPath::String)
 
     # Create figures for F₃₃ and its derivatives.
     println("Working on figure F₃₃ for 3D.")
-    F₃₃1 = zeros(Float64, N+1)
-    F₃₃2 = zeros(Float64, N+1)
-    F₃₃3 = zeros(Float64, N+1)
-    for n in 1:N+1
+    F₃₃1 = zeros(Float64, N)
+    F₃₃2 = zeros(Float64, N)
+    F₃₃3 = zeros(Float64, N)
+    for n in 1:N
         Fᵢⱼ1 = splineF1.F[n]
         F₃₃1[n] = get(Fᵢⱼ1[3,3])
         Fᵢⱼ2 = splineF2.F[n]
@@ -2471,10 +2470,10 @@ function figures3D(N::Integer, myDirPath::String)
     save(myPath, fig)
 
     println("Working on figure dF₃₃/dt for 3D.")
-    dF₃₃1 = zeros(Float64, N+1)
-    dF₃₃2 = zeros(Float64, N+1)
-    dF₃₃3 = zeros(Float64, N+1)
-    for n in 1:N+1
+    dF₃₃1 = zeros(Float64, N)
+    dF₃₃2 = zeros(Float64, N)
+    dF₃₃3 = zeros(Float64, N)
+    for n in 1:N
         dFᵢⱼ1 = splineF1.F′[n]
         dF₃₃1[n] = get(dFᵢⱼ1[3,3])
         dFᵢⱼ2 = splineF2.F′[n]
@@ -2510,10 +2509,10 @@ function figures3D(N::Integer, myDirPath::String)
     save(myPath, fig)
 
     println("Working on figure d²F₃₃/dt for 3D.")
-    d²F₃₃1 = zeros(Float64, N+1)
-    d²F₃₃2 = zeros(Float64, N+1)
-    d²F₃₃3 = zeros(Float64, N+1)
-    for n in 1:N+1
+    d²F₃₃1 = zeros(Float64, N)
+    d²F₃₃2 = zeros(Float64, N)
+    d²F₃₃3 = zeros(Float64, N)
+    for n in 1:N
         d²Fᵢⱼ1 = splineF1.F′′[n]
         d²F₃₃1[n] = get(d²Fᵢⱼ1[3,3])
         d²Fᵢⱼ2 = splineF2.F′′[n]
@@ -2550,10 +2549,10 @@ function figures3D(N::Integer, myDirPath::String)
 
     # Create a figure for det(F).
     println("Working on figure det(F)-1 for 3D.")
-    detF1 = zeros(Float64, N+1)
-    detF2 = zeros(Float64, N+1)
-    detF3 = zeros(Float64, N+1)
-    for n in 1:N+1
+    detF1 = zeros(Float64, N)
+    detF2 = zeros(Float64, N)
+    detF3 = zeros(Float64, N)
+    for n in 1:N
         Fᵢⱼ1 = splineF1.F[n]
         detF1[n] = get(det(Fᵢⱼ1)) - 1
         Fᵢⱼ2 = splineF2.F[n]
@@ -2591,10 +2590,10 @@ function figures3D(N::Integer, myDirPath::String)
 
     # Create a figure for tr(F).
     println("Working on figure tr(F) for 3D.")
-    trF1 = zeros(Float64, N+1)
-    trF2 = zeros(Float64, N+1)
-    trF3 = zeros(Float64, N+1)
-    for n in 1:N+1
+    trF1 = zeros(Float64, N)
+    trF2 = zeros(Float64, N)
+    trF3 = zeros(Float64, N)
+    for n in 1:N
         Fᵢⱼ1 = splineF1.F[n]
         trF1[n] = get(tr(Fᵢⱼ1)) - 3
         Fᵢⱼ2 = splineF2.F[n]
