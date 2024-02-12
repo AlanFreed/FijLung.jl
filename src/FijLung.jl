@@ -1,6 +1,6 @@
 #=
 Created on Fri 18 Feb 2022
-Updated on Wed 24 Jan 2024
+Updated on Mon 12 Feb 2024
 =#
 """
 Module:\n
@@ -19,8 +19,10 @@ along with two external constructors:\n
 """
 module FijLung
 
+import
+    BSplineKit: *, BSplineOrder, Derivative, interpolate
+
 using
-    BSplineKit,
     CSV,
     DataFrames,
     Downloads,
