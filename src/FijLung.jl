@@ -1,6 +1,6 @@
 #=
 Created on Fri 18 Feb 2022
-Updated on Mon 12 Feb 2024
+Updated on Fri 16 Feb 2024
 =#
 """
 Module:\n
@@ -20,7 +20,8 @@ along with two external constructors:\n
 module FijLung
 
 import
-    BSplineKit: *, BSplineOrder, Derivative, interpolate
+    BSplineKit:
+        BSplineOrder, diff, Derivative, interpolate, Natural
 
 using
     CSV,
@@ -283,7 +284,7 @@ Type:\n
         F       # F         The deformation gradient.\n
         F′      # dF/dt     Its first derivative in time.\n
         F′′     # d²F/dt²   Its second derivative in time.\n
-This data structure smooths the raw data supplied by F_loc1, F_loc2 or F_loc3, as specified by parameter `loc,` by applying B-splines to the raw data; specifically, F is fit with a cubic spline, and therefore, its first derivative dF/dt is described by a quadratic spline, and its second derivative d²F/dt² is described by a linear spline. Fields `loc` and `N` are Integers. Field `t` is an instance of type `PhysicalFields.ArrayOfPhysicalScalars,` while fields `F,` `F′` and `F′′` are instances of type `PhysicalFields.ArrayOfPhysicalTensors.` The data arrays are of length N+1 with entry [1] supplying its initial condition, with the remaining N entries being evenly spaced through time.\n
+This data structure smooths the raw data supplied by F_loc1, F_loc2 or F_loc3, as specified by parameter `loc,` by applying B-splines to the raw data; specifically, F is fit with a cubic spline, and therefore, its first derivative dF/dt is described by a quadratic spline, and its second derivative d²F/dt² is described by a linear spline. Fields `loc` and `N` are Integers. Field `t` is an instance of type `PhysicalFields.ArrayOfPhysicalScalars,` while fields `F,` `F′` and `F′′` are instances of type `PhysicalFields.ArrayOfPhysicalTensors.` The data arrays are of length N+1 with entry [1] supplying its initial condition, while the remaining N entries are evenly spaced through time.\n
 The supplied deformation gradient and its first two derivatives are evaluated at one of three lung locations extracted from an FE analysis of a human torso subjected to a ballistic impact. Location loc = 1 associates with a location that is just under the visceral pleura, near the point of impact. Location loc = 2 associates with a location that is deep within the lung. While location loc = 3 associates with a location that lies next to a bronchiole tube.
 """
 struct SplineF
@@ -304,9 +305,14 @@ end # SplineF
 # External Constructors
 
 """
-Constructor:\n
-    splineF = splineAtEndPoints(location, nodes)\n
-This constructor creates an instance of type SplineF, which is returned as an object `splineF.` Each object contains interpolated values for the deformation gradient F, its first derivative dF/dt, and its second derivative d²F/dt² at N uniformly spaced `nodes` over time. The arrays are of length N+1, with the first entry in each array associating with its corresponding initial condition, while the remaining entries associate with the end points of N uniformly sized time intervals.\n
+    splineAtEndPoints(location::Integer, nodes::Integer)::SplineF
+
+Constructor:
+
+    splineF = splineAtEndPoints(location, nodes)
+
+This constructor creates an instance of type SplineF, which is returned as an object `splineF.` Each object contains interpolated values for the deformation gradient F, its first derivative dF/dt, and its second derivative d²F/dt² at N uniformly spaced `nodes` over time. The arrays are of length N+1, with the first entry in each array associating with its corresponding initial condition, while the remaining entries associate with end-point values for N uniformly spaced time intervals.
+
 Each data structure associates with one of three locations in a lung obtained from an FE analysis of a human torso subjected to a ballistic impact. Location 1 associates with a location that is just under the visceral pleura. Location 2 associates with a location that is deep within the right lung. While location 3 associates with a location that lies next to a bronchiole tube.
 """
 function splineAtEndPoints(location::Integer, nodes::Integer)::SplineF
@@ -354,16 +360,37 @@ function splineAtEndPoints(location::Integer, nodes::Integer)::SplineF
     end
 
     # Create cubic B-splines for each component of the deformation gradient.
-    splineOrder = BSplineOrder(4)
-    S₁₁ = interpolate(rawTime, rawF₁₁, splineOrder)
-    S₁₂ = interpolate(rawTime, rawF₁₂, splineOrder)
-    S₁₃ = interpolate(rawTime, rawF₁₃, splineOrder)
-    S₂₁ = interpolate(rawTime, rawF₂₁, splineOrder)
-    S₂₂ = interpolate(rawTime, rawF₂₂, splineOrder)
-    S₂₃ = interpolate(rawTime, rawF₂₃, splineOrder)
-    S₃₁ = interpolate(rawTime, rawF₃₁, splineOrder)
-    S₃₂ = interpolate(rawTime, rawF₃₂, splineOrder)
-    S₃₃ = interpolate(rawTime, rawF₃₃, splineOrder)
+    S₁₁ = interpolate(rawTime, rawF₁₁, BSplineOrder(4), Natural())
+    S₁₂ = interpolate(rawTime, rawF₁₂, BSplineOrder(4), Natural())
+    S₁₃ = interpolate(rawTime, rawF₁₃, BSplineOrder(4), Natural())
+    S₂₁ = interpolate(rawTime, rawF₂₁, BSplineOrder(4), Natural())
+    S₂₂ = interpolate(rawTime, rawF₂₂, BSplineOrder(4), Natural())
+    S₂₃ = interpolate(rawTime, rawF₂₃, BSplineOrder(4), Natural())
+    S₃₁ = interpolate(rawTime, rawF₃₁, BSplineOrder(4), Natural())
+    S₃₂ = interpolate(rawTime, rawF₃₂, BSplineOrder(4), Natural())
+    S₃₃ = interpolate(rawTime, rawF₃₃, BSplineOrder(4), Natural())
+
+    # Create quadratic B-splines for the first derivative of each component.
+    S′₁₁  = diff(S₁₁, Derivative(1))
+    S′₁₂  = diff(S₁₂, Derivative(1))
+    S′₁₃  = diff(S₁₃, Derivative(1))
+    S′₂₁  = diff(S₂₁, Derivative(1))
+    S′₂₂  = diff(S₂₂, Derivative(1))
+    S′₂₃  = diff(S₂₃, Derivative(1))
+    S′₃₁  = diff(S₃₁, Derivative(1))
+    S′₃₂  = diff(S₃₂, Derivative(1))
+    S′₃₃  = diff(S₃₃, Derivative(1))
+
+    # Create linear B-splines for the second derivative of each component.
+    S′′₁₁ = diff(S₁₁, Derivative(2))
+    S′′₁₂ = diff(S₁₂, Derivative(2))
+    S′′₁₃ = diff(S₁₃, Derivative(2))
+    S′′₂₁ = diff(S₂₁, Derivative(2))
+    S′′₂₂ = diff(S₂₂, Derivative(2))
+    S′′₂₃ = diff(S₂₃, Derivative(2))
+    S′′₃₁ = diff(S₃₁, Derivative(2))
+    S′′₃₂ = diff(S₃₂, Derivative(2))
+    S′′₃₃ = diff(S₃₃, Derivative(2))
 
     # Create the data arrays that span time which hold these data.
     t   = ArrayOfPhysicalScalars(nodes+1, SECOND)
@@ -374,10 +401,10 @@ function splineAtEndPoints(location::Integer, nodes::Integer)::SplineF
     # Establish the time increment between adjacent nodes.
     dt = (time[knots] - time[1]) / nodes
 
-    # Populate the time array with end-point times.
-    t[1] = time[1]          # the initial time
+    # Populate the time array with uniformly spaced end-point times.
+    t[1] = time[1]           # the initial time
     for n in 1:nodes
-        t[n+1] = t[n] + dt  # the end-point times
+        t[n+1] = t[1] + n*dt # the end-point times
     end
 
     # Populate the kinematic arrays with end-point data.
@@ -404,26 +431,26 @@ function splineAtEndPoints(location::Integer, nodes::Integer)::SplineF
         Fₙ[3,3] = PhysicalScalar(S₃₃(tₙ), STRETCH)
 
         # For the first derivative of the deformation gradient.
-        dFₙ[1,1] = PhysicalScalar((Derivative(1)*S₁₁)(tₙ), STRETCH_RATE)
-        dFₙ[1,2] = PhysicalScalar((Derivative(1)*S₁₂)(tₙ), STRETCH_RATE)
-        dFₙ[1,3] = PhysicalScalar((Derivative(1)*S₁₃)(tₙ), STRETCH_RATE)
-        dFₙ[2,1] = PhysicalScalar((Derivative(1)*S₂₁)(tₙ), STRETCH_RATE)
-        dFₙ[2,2] = PhysicalScalar((Derivative(1)*S₂₂)(tₙ), STRETCH_RATE)
-        dFₙ[2,3] = PhysicalScalar((Derivative(1)*S₂₃)(tₙ), STRETCH_RATE)
-        dFₙ[3,1] = PhysicalScalar((Derivative(1)*S₃₁)(tₙ), STRETCH_RATE)
-        dFₙ[3,2] = PhysicalScalar((Derivative(1)*S₃₂)(tₙ), STRETCH_RATE)
-        dFₙ[3,3] = PhysicalScalar((Derivative(1)*S₃₃)(tₙ), STRETCH_RATE)
+        dFₙ[1,1] = PhysicalScalar(S′₁₁(tₙ), STRETCH_RATE)
+        dFₙ[1,2] = PhysicalScalar(S′₁₂(tₙ), STRETCH_RATE)
+        dFₙ[1,3] = PhysicalScalar(S′₁₃(tₙ), STRETCH_RATE)
+        dFₙ[2,1] = PhysicalScalar(S′₂₁(tₙ), STRETCH_RATE)
+        dFₙ[2,2] = PhysicalScalar(S′₂₂(tₙ), STRETCH_RATE)
+        dFₙ[2,3] = PhysicalScalar(S′₂₃(tₙ), STRETCH_RATE)
+        dFₙ[3,1] = PhysicalScalar(S′₃₁(tₙ), STRETCH_RATE)
+        dFₙ[3,2] = PhysicalScalar(S′₃₂(tₙ), STRETCH_RATE)
+        dFₙ[3,3] = PhysicalScalar(S′₃₃(tₙ), STRETCH_RATE)
 
         # For the second derivative of the deformation gradient.
-        d²Fₙ[1,1] = PhysicalScalar((Derivative(2)*S₁₁)(tₙ), STRETCH_ACEL)
-        d²Fₙ[1,2] = PhysicalScalar((Derivative(2)*S₁₂)(tₙ), STRETCH_ACEL)
-        d²Fₙ[1,3] = PhysicalScalar((Derivative(2)*S₁₃)(tₙ), STRETCH_ACEL)
-        d²Fₙ[2,1] = PhysicalScalar((Derivative(2)*S₂₁)(tₙ), STRETCH_ACEL)
-        d²Fₙ[2,2] = PhysicalScalar((Derivative(2)*S₂₂)(tₙ), STRETCH_ACEL)
-        d²Fₙ[2,3] = PhysicalScalar((Derivative(2)*S₂₃)(tₙ), STRETCH_ACEL)
-        d²Fₙ[3,1] = PhysicalScalar((Derivative(2)*S₃₁)(tₙ), STRETCH_ACEL)
-        d²Fₙ[3,2] = PhysicalScalar((Derivative(2)*S₃₂)(tₙ), STRETCH_ACEL)
-        d²Fₙ[3,3] = PhysicalScalar((Derivative(2)*S₃₃)(tₙ), STRETCH_ACEL)
+        d²Fₙ[1,1] = PhysicalScalar(S′′₁₁(tₙ), STRETCH_ACEL)
+        d²Fₙ[1,2] = PhysicalScalar(S′′₁₂(tₙ), STRETCH_ACEL)
+        d²Fₙ[1,3] = PhysicalScalar(S′′₁₃(tₙ), STRETCH_ACEL)
+        d²Fₙ[2,1] = PhysicalScalar(S′′₂₁(tₙ), STRETCH_ACEL)
+        d²Fₙ[2,2] = PhysicalScalar(S′′₂₂(tₙ), STRETCH_ACEL)
+        d²Fₙ[2,3] = PhysicalScalar(S′′₂₃(tₙ), STRETCH_ACEL)
+        d²Fₙ[3,1] = PhysicalScalar(S′′₃₁(tₙ), STRETCH_ACEL)
+        d²Fₙ[3,2] = PhysicalScalar(S′′₃₂(tₙ), STRETCH_ACEL)
+        d²Fₙ[3,3] = PhysicalScalar(S′′₃₃(tₙ), STRETCH_ACEL)
 
         # Assign these fields to their associated arrays.
         F[n]   = Fₙ
@@ -440,7 +467,7 @@ end # splineAtEndPoints
 """
 Constructor:\n
     splineF = splineAtMidPoints(location, nodes)\n
-This constructor creates an instance of type SplineF, which is returned as an object `splineF.` Each object contains interpolated values for the deformation gradient F, its first derivative dF/dt, and its second derivative d²F/dt² at N uniformly spaced `nodes` over time. The arrays are of length N+1, with the first entry in each array associating with its corresponding initial condition, while the remaining entries associate with the mid points of N uniformly sized time intervals.\n
+This constructor creates an instance of type SplineF, which is returned as an object `splineF.` Each object contains interpolated values for the deformation gradient F, its first derivative dF/dt, and its second derivative d²F/dt² at N uniformly spaced `nodes` over time. The arrays are of length N+1, with the first entry in each array associating with its corresponding initial condition, while the remaining entries associate with mid-point values for N uniformly spaced time intervals.\n
 Each data structure associates with one of three locations in a lung obtained from an FE analysis of a human torso subjected to a ballistic impact. Location 1 associates with a location that is just under the visceral pleura. Location 2 associates with a location that is deep within the right lung. While location 3 associates with a location that lies next to a bronchiole tube.
 """
 function splineAtMidPoints(location::Integer, nodes::Integer)::SplineF
@@ -488,16 +515,37 @@ function splineAtMidPoints(location::Integer, nodes::Integer)::SplineF
     end
 
     # Create cubic B-splines for each component of the deformation gradient.
-    splineOrder = BSplineOrder(4)
-    S₁₁ = interpolate(rawTime, rawF₁₁, splineOrder)
-    S₁₂ = interpolate(rawTime, rawF₁₂, splineOrder)
-    S₁₃ = interpolate(rawTime, rawF₁₃, splineOrder)
-    S₂₁ = interpolate(rawTime, rawF₂₁, splineOrder)
-    S₂₂ = interpolate(rawTime, rawF₂₂, splineOrder)
-    S₂₃ = interpolate(rawTime, rawF₂₃, splineOrder)
-    S₃₁ = interpolate(rawTime, rawF₃₁, splineOrder)
-    S₃₂ = interpolate(rawTime, rawF₃₂, splineOrder)
-    S₃₃ = interpolate(rawTime, rawF₃₃, splineOrder)
+    S₁₁ = interpolate(rawTime, rawF₁₁, BSplineOrder(4), Natural())
+    S₁₂ = interpolate(rawTime, rawF₁₂, BSplineOrder(4), Natural())
+    S₁₃ = interpolate(rawTime, rawF₁₃, BSplineOrder(4), Natural())
+    S₂₁ = interpolate(rawTime, rawF₂₁, BSplineOrder(4), Natural())
+    S₂₂ = interpolate(rawTime, rawF₂₂, BSplineOrder(4), Natural())
+    S₂₃ = interpolate(rawTime, rawF₂₃, BSplineOrder(4), Natural())
+    S₃₁ = interpolate(rawTime, rawF₃₁, BSplineOrder(4), Natural())
+    S₃₂ = interpolate(rawTime, rawF₃₂, BSplineOrder(4), Natural())
+    S₃₃ = interpolate(rawTime, rawF₃₃, BSplineOrder(4), Natural())
+
+    # Create quadratic B-splines for the first derivative of each component.
+    S′₁₁  = diff(S₁₁, Derivative(1))
+    S′₁₂  = diff(S₁₂, Derivative(1))
+    S′₁₃  = diff(S₁₃, Derivative(1))
+    S′₂₁  = diff(S₂₁, Derivative(1))
+    S′₂₂  = diff(S₂₂, Derivative(1))
+    S′₂₃  = diff(S₂₃, Derivative(1))
+    S′₃₁  = diff(S₃₁, Derivative(1))
+    S′₃₂  = diff(S₃₂, Derivative(1))
+    S′₃₃  = diff(S₃₃, Derivative(1))
+
+    # Create linear B-splines for the second derivative of each component.
+    S′′₁₁ = diff(S₁₁, Derivative(2))
+    S′′₁₂ = diff(S₁₂, Derivative(2))
+    S′′₁₃ = diff(S₁₃, Derivative(2))
+    S′′₂₁ = diff(S₂₁, Derivative(2))
+    S′′₂₂ = diff(S₂₂, Derivative(2))
+    S′′₂₃ = diff(S₂₃, Derivative(2))
+    S′′₃₁ = diff(S₃₁, Derivative(2))
+    S′′₃₂ = diff(S₃₂, Derivative(2))
+    S′′₃₃ = diff(S₃₃, Derivative(2))
 
     # Create the data arrays that span time which hold these data.
     t   = ArrayOfPhysicalScalars(nodes+1, SECOND)
@@ -508,11 +556,11 @@ function splineAtMidPoints(location::Integer, nodes::Integer)::SplineF
     # Establish the time increment between adjacent nodes.
     dt = (time[knots] - time[1]) / nodes
 
-    # Populate the time array with mid-point times.
-    t[1] = time[1]          # the initial time
-    t[2] = t[1] + 0.5dt     # the first mid-point time
+    # Populate the time array with uniformly spaced mid-point times.
+    t[1] = time[1]                  # the initial time
+    t[2] = t[1] + 0.5dt             # the first mid-point time
     for n in 2:nodes
-        t[n+1] = t[n] + dt  # the remaining mid-point times
+        t[n+1] = t[2] + (n-1)*dt    # the remaining mid-point times
     end
 
     # Populate the kinematic arrays with mid-point data.
@@ -539,26 +587,26 @@ function splineAtMidPoints(location::Integer, nodes::Integer)::SplineF
         Fₙ[3,3] = PhysicalScalar(S₃₃(tₙ), STRETCH)
 
         # For the first derivative of the deformation gradient.
-        dFₙ[1,1] = PhysicalScalar((Derivative(1)*S₁₁)(tₙ), STRETCH_RATE)
-        dFₙ[1,2] = PhysicalScalar((Derivative(1)*S₁₂)(tₙ), STRETCH_RATE)
-        dFₙ[1,3] = PhysicalScalar((Derivative(1)*S₁₃)(tₙ), STRETCH_RATE)
-        dFₙ[2,1] = PhysicalScalar((Derivative(1)*S₂₁)(tₙ), STRETCH_RATE)
-        dFₙ[2,2] = PhysicalScalar((Derivative(1)*S₂₂)(tₙ), STRETCH_RATE)
-        dFₙ[2,3] = PhysicalScalar((Derivative(1)*S₂₃)(tₙ), STRETCH_RATE)
-        dFₙ[3,1] = PhysicalScalar((Derivative(1)*S₃₁)(tₙ), STRETCH_RATE)
-        dFₙ[3,2] = PhysicalScalar((Derivative(1)*S₃₂)(tₙ), STRETCH_RATE)
-        dFₙ[3,3] = PhysicalScalar((Derivative(1)*S₃₃)(tₙ), STRETCH_RATE)
+        dFₙ[1,1] = PhysicalScalar(S′₁₁(tₙ), STRETCH_RATE)
+        dFₙ[1,2] = PhysicalScalar(S′₁₂(tₙ), STRETCH_RATE)
+        dFₙ[1,3] = PhysicalScalar(S′₁₃(tₙ), STRETCH_RATE)
+        dFₙ[2,1] = PhysicalScalar(S′₂₁(tₙ), STRETCH_RATE)
+        dFₙ[2,2] = PhysicalScalar(S′₂₂(tₙ), STRETCH_RATE)
+        dFₙ[2,3] = PhysicalScalar(S′₂₃(tₙ), STRETCH_RATE)
+        dFₙ[3,1] = PhysicalScalar(S′₃₁(tₙ), STRETCH_RATE)
+        dFₙ[3,2] = PhysicalScalar(S′₃₂(tₙ), STRETCH_RATE)
+        dFₙ[3,3] = PhysicalScalar(S′₃₃(tₙ), STRETCH_RATE)
 
         # For the second derivative of the deformation gradient.
-        d²Fₙ[1,1] = PhysicalScalar((Derivative(2)*S₁₁)(tₙ), STRETCH_ACEL)
-        d²Fₙ[1,2] = PhysicalScalar((Derivative(2)*S₁₂)(tₙ), STRETCH_ACEL)
-        d²Fₙ[1,3] = PhysicalScalar((Derivative(2)*S₁₃)(tₙ), STRETCH_ACEL)
-        d²Fₙ[2,1] = PhysicalScalar((Derivative(2)*S₂₁)(tₙ), STRETCH_ACEL)
-        d²Fₙ[2,2] = PhysicalScalar((Derivative(2)*S₂₂)(tₙ), STRETCH_ACEL)
-        d²Fₙ[2,3] = PhysicalScalar((Derivative(2)*S₂₃)(tₙ), STRETCH_ACEL)
-        d²Fₙ[3,1] = PhysicalScalar((Derivative(2)*S₃₁)(tₙ), STRETCH_ACEL)
-        d²Fₙ[3,2] = PhysicalScalar((Derivative(2)*S₃₂)(tₙ), STRETCH_ACEL)
-        d²Fₙ[3,3] = PhysicalScalar((Derivative(2)*S₃₃)(tₙ), STRETCH_ACEL)
+        d²Fₙ[1,1] = PhysicalScalar(S′′₁₁(tₙ), STRETCH_ACEL)
+        d²Fₙ[1,2] = PhysicalScalar(S′′₁₂(tₙ), STRETCH_ACEL)
+        d²Fₙ[1,3] = PhysicalScalar(S′′₁₃(tₙ), STRETCH_ACEL)
+        d²Fₙ[2,1] = PhysicalScalar(S′′₂₁(tₙ), STRETCH_ACEL)
+        d²Fₙ[2,2] = PhysicalScalar(S′′₂₂(tₙ), STRETCH_ACEL)
+        d²Fₙ[2,3] = PhysicalScalar(S′′₂₃(tₙ), STRETCH_ACEL)
+        d²Fₙ[3,1] = PhysicalScalar(S′′₃₁(tₙ), STRETCH_ACEL)
+        d²Fₙ[3,2] = PhysicalScalar(S′′₃₂(tₙ), STRETCH_ACEL)
+        d²Fₙ[3,3] = PhysicalScalar(S′′₃₃(tₙ), STRETCH_ACEL)
 
         # Assign these fields to their associated arrays.
         F[n]   = Fₙ
