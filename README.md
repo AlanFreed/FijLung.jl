@@ -88,6 +88,12 @@ An example of how these data can be used, e.g., plotted, can be found in the *te
 
 # Version History
 
+## Version 1.0.3
+
+The overloaded operator * used for differentiating splines (according to BSplineKit) was replaced with the base function it calls, viz., diff, as the overloaded operator * gets confused in some cases. This did not affect the interface. 
+
+A substantial performance improvement was implemented.
+
 ## Version 1.0.2
 
 Directly imported the needed funtions supplied by BSplineKit instead of just a general include via using.
