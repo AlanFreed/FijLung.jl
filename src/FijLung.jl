@@ -1,6 +1,6 @@
 #=
 Created on Fri 18 Feb 2022
-Updated on Fri 16 Feb 2024
+Updated on Wed 17 Apr 2024
 =#
 """
 Module:\n
@@ -19,11 +19,8 @@ along with two external constructors:\n
 """
 module FijLung
 
-import
-    BSplineKit:
-        BSplineOrder, diff, Derivative, interpolate, Natural
-
 using
+    BSplineKit,
     CSV,
     DataFrames,
     Downloads,
@@ -371,26 +368,26 @@ function splineAtEndPoints(location::Integer, nodes::Integer)::SplineF
     S₃₃ = interpolate(rawTime, rawF₃₃, BSplineOrder(4))
 
     # Create quadratic B-splines for the first derivative of each component.
-    S′₁₁  = diff(S₁₁)
-    S′₁₂  = diff(S₁₂)
-    S′₁₃  = diff(S₁₃)
-    S′₂₁  = diff(S₂₁)
-    S′₂₂  = diff(S₂₂)
-    S′₂₃  = diff(S₂₃)
-    S′₃₁  = diff(S₃₁)
-    S′₃₂  = diff(S₃₂)
-    S′₃₃  = diff(S₃₃)
+    S′₁₁  = Derivative(1) * S₁₁
+    S′₁₂  = Derivative(1) * S₁₂
+    S′₁₃  = Derivative(1) * S₁₃
+    S′₂₁  = Derivative(1) * S₂₁
+    S′₂₂  = Derivative(1) * S₂₂
+    S′₂₃  = Derivative(1) * S₂₃
+    S′₃₁  = Derivative(1) * S₃₁
+    S′₃₂  = Derivative(1) * S₃₂
+    S′₃₃  = Derivative(1) * S₃₃
 
     # Create linear B-splines for the second derivative of each component.
-    S′′₁₁ = diff(S′₁₁)
-    S′′₁₂ = diff(S′₁₂)
-    S′′₁₃ = diff(S′₁₃)
-    S′′₂₁ = diff(S′₂₁)
-    S′′₂₂ = diff(S′₂₂)
-    S′′₂₃ = diff(S′₂₃)
-    S′′₃₁ = diff(S′₃₁)
-    S′′₃₂ = diff(S′₃₂)
-    S′′₃₃ = diff(S′₃₃)
+    S′′₁₁  = Derivative(2) * S₁₁
+    S′′₁₂  = Derivative(2) * S₁₂
+    S′′₁₃  = Derivative(2) * S₁₃
+    S′′₂₁  = Derivative(2) * S₂₁
+    S′′₂₂  = Derivative(2) * S₂₂
+    S′′₂₃  = Derivative(2) * S₂₃
+    S′′₃₁  = Derivative(2) * S₃₁
+    S′′₃₂  = Derivative(2) * S₃₂
+    S′′₃₃  = Derivative(2) * S₃₃
 
     # Create the data arrays that span time which hold these data.
     t   = ArrayOfPhysicalScalars(nodes+1, SECOND)
@@ -526,26 +523,27 @@ function splineAtMidPoints(location::Integer, nodes::Integer)::SplineF
     S₃₃ = interpolate(rawTime, rawF₃₃, BSplineOrder(4))
 
     # Create quadratic B-splines for the first derivative of each component.
-    S′₁₁  = diff(S₁₁)
-    S′₁₂  = diff(S₁₂)
-    S′₁₃  = diff(S₁₃)
-    S′₂₁  = diff(S₂₁)
-    S′₂₂  = diff(S₂₂)
-    S′₂₃  = diff(S₂₃)
-    S′₃₁  = diff(S₃₁)
-    S′₃₂  = diff(S₃₂)
-    S′₃₃  = diff(S₃₃)
+    S′₁₁  = Derivative(1) * S₁₁
+    S′₁₂  = Derivative(1) * S₁₂
+    S′₁₃  = Derivative(1) * S₁₃
+    S′₂₁  = Derivative(1) * S₂₁
+    S′₂₂  = Derivative(1) * S₂₂
+    S′₂₃  = Derivative(1) * S₂₃
+    S′₃₁  = Derivative(1) * S₃₁
+    S′₃₂  = Derivative(1) * S₃₂
+    S′₃₃  = Derivative(1) * S₃₃
 
     # Create linear B-splines for the second derivative of each component.
-    S′′₁₁ = diff(S′₁₁)
-    S′′₁₂ = diff(S′₁₂)
-    S′′₁₃ = diff(S′₁₃)
-    S′′₂₁ = diff(S′₂₁)
-    S′′₂₂ = diff(S′₂₂)
-    S′′₂₃ = diff(S′₂₃)
-    S′′₃₁ = diff(S′₃₁)
-    S′′₃₂ = diff(S′₃₂)
-    S′′₃₃ = diff(S′₃₃)
+    S′′₁₁  = Derivative(2) * S₁₁
+    S′′₁₂  = Derivative(2) * S₁₂
+    S′′₁₃  = Derivative(2) * S₁₃
+    S′′₂₁  = Derivative(2) * S₂₁
+    S′′₂₂  = Derivative(2) * S₂₂
+    S′′₂₃  = Derivative(2) * S₂₃
+    S′′₃₁  = Derivative(2) * S₃₁
+    S′′₃₂  = Derivative(2) * S₃₂
+    S′′₃₃  = Derivative(2) * S₃₃
+
 
     # Create the data arrays that span time which hold these data.
     t   = ArrayOfPhysicalScalars(nodes+1, SECOND)
