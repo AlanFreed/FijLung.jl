@@ -10,6 +10,7 @@ To use this module, you will need to add the following repositories to your proj
 
 ```
 using Pkg
+Pkg.add(url = "https://github.com/AlanFreed/CubicSplines.jl")
 Pkg.add(url = "https://github.com/AlanFreed/PhysicalFields.jl")
 Pkg.add(url = "https://github.com/AlanFreed/FijLung.jl")
 ```
@@ -67,7 +68,7 @@ struct SplineF
     t::  ArrayOfPhysicalScalars   # t         Time at the node of each interval.
     F::  ArrayOfPhysicalTensors   # F         Their deformation gradients.
     F′:: ArrayOfPhysicalTensors   # dF/dt     Their first derivatives in time.
-    F′′::ArrayOfPhysicalTensors   # d²F/dt²   Their second derivatives in time.
+    F″::ArrayOfPhysicalTensors    # d²F/dt²   Their second derivatives in time.
 end
 ```
 
@@ -80,13 +81,17 @@ function splineAtEndPoints(location::Integer, nodes::Integer)::SplineF
 function splineAtMidPoints(location::Integer, nodes::Integer)::SplineF
 ```
 
-There are 340 knots, or raw data points, supplied by the data files that the B-spline function fits. Typically, the number of nodes required of an analysis will be a value much greater than this, e.g., 1000. The deformation gradient `SplineF.F` comes from a cubic B-spline of these raw data. Its first derivative `SplineF.F′` is therefore described by a quadratic B-spline, while its second derivative `SplineF.F′′` is described by a linear B-spline.
+There are 340 knots, or raw data points, supplied by the data files that the spline function fits. Typically, the number of nodes required of an analysis will be a value much greater than this, e.g., 1000. The deformation gradient `SplineF.F` comes from a clamped cubic spline of these raw data. Its first derivative `SplineF.F′` is therefore described by a quadratic spline, while its second derivative `SplineF.F″` is described by a linear spline.
 
 ### Test
 
 An example of how these data can be used, e.g., plotted, can be found in the *test* directory in file *testFijLung.jl*.
 
 # Version History
+
+## Version 1.1.0
+
+Changed the spline library used from *BSplineKit.jl* to *CubicSplines.jl*. Also, changed *SplineF.F′′* to a more condensed notation of *SplineF.F″*.
 
 ## Version 1.0.3
 
