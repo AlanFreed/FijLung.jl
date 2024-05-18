@@ -1,6 +1,6 @@
 #=
 Created on Sat 19 Feb 2022
-Updated on Mon 12 Feb 2024
+Updated on Sat 18 May 2024
 =#
 """
 Module:\n
@@ -352,7 +352,7 @@ function figures2D(N::Integer, myDirPath::String)
     myPath = string(myDirPath, "2DtrF.png")
     save(myPath, fig)
 
-    println("Now we recreate these figures using B-spline data.")
+    println("Now we recreate these figures using cubic spline data.")
 
     splineF1 = splineAtEndPoints(1, N)
     splineF2 = splineAtEndPoints(2, N)
@@ -454,11 +454,11 @@ function figures2D(N::Integer, myDirPath::String)
     d²F₁₁2 = zeros(Float64, N)
     d²F₁₁3 = zeros(Float64, N)
     for n in 1:N
-        d²Fᵢⱼ1 = splineF1.F′′[n]
+        d²Fᵢⱼ1 = splineF1.F″[n]
         d²F₁₁1[n] = get(d²Fᵢⱼ1[2,2])
-        d²Fᵢⱼ2 = splineF2.F′′[n]
+        d²Fᵢⱼ2 = splineF2.F″[n]
         d²F₁₁2[n] = get(d²Fᵢⱼ2[2,2])
-        d²Fᵢⱼ3 = splineF3.F′′[n]
+        d²Fᵢⱼ3 = splineF3.F″[n]
         d²F₁₁3[n] = get(d²Fᵢⱼ3[2,2])
     end
     fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
@@ -573,11 +573,11 @@ function figures2D(N::Integer, myDirPath::String)
     d²F₁₂2 = zeros(Float64, N)
     d²F₁₂3 = zeros(Float64, N)
     for n in 1:N
-        d²Fᵢⱼ1 = splineF1.F′′[n]
+        d²Fᵢⱼ1 = splineF1.F″[n]
         d²F₁₂1[n] = get(d²Fᵢⱼ1[2,3])
-        d²Fᵢⱼ2 = splineF2.F′′[n]
+        d²Fᵢⱼ2 = splineF2.F″[n]
         d²F₁₂2[n] = get(d²Fᵢⱼ2[2,3])
-        d²Fᵢⱼ3 = splineF3.F′′[n]
+        d²Fᵢⱼ3 = splineF3.F″[n]
         d²F₁₂3[n] = get(d²Fᵢⱼ3[2,3])
     end
     fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
@@ -692,11 +692,11 @@ function figures2D(N::Integer, myDirPath::String)
     d²F₂₁2 = zeros(Float64, N)
     d²F₂₁3 = zeros(Float64, N)
     for n in 1:N
-        d²Fᵢⱼ1 = splineF1.F′′[n]
+        d²Fᵢⱼ1 = splineF1.F″[n]
         d²F₂₁1[n] = get(d²Fᵢⱼ1[3,2])
-        d²Fᵢⱼ2 = splineF2.F′′[n]
+        d²Fᵢⱼ2 = splineF2.F″[n]
         d²F₂₁2[n] = get(d²Fᵢⱼ2[3,2])
-        d²Fᵢⱼ3 = splineF3.F′′[n]
+        d²Fᵢⱼ3 = splineF3.F″[n]
         d²F₂₁3[n] = get(d²Fᵢⱼ3[3,2])
     end
     fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
@@ -811,11 +811,11 @@ function figures2D(N::Integer, myDirPath::String)
     d²F₂₂2 = zeros(Float64, N)
     d²F₂₂3 = zeros(Float64, N)
     for n in 1:N
-        d²Fᵢⱼ1 = splineF1.F′′[n]
+        d²Fᵢⱼ1 = splineF1.F″[n]
         d²F₂₂1[n] = get(d²Fᵢⱼ1[3,3])
-        d²Fᵢⱼ2 = splineF2.F′′[n]
+        d²Fᵢⱼ2 = splineF2.F″[n]
         d²F₂₂2[n] = get(d²Fᵢⱼ2[3,3])
-        d²Fᵢⱼ3 = splineF3.F′′[n]
+        d²Fᵢⱼ3 = splineF3.F″[n]
         d²F₂₂3[n] = get(d²Fᵢⱼ3[3,3])
     end
     fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
@@ -1561,11 +1561,11 @@ function figures3D(N::Integer, myDirPath::String)
     d²F₁₁2 = zeros(Float64, N)
     d²F₁₁3 = zeros(Float64, N)
     for n in 1:N
-        d²Fᵢⱼ1 = splineF1.F′′[n]
+        d²Fᵢⱼ1 = splineF1.F″[n]
         d²F₁₁1[n] = get(d²Fᵢⱼ1[1,1])
-        d²Fᵢⱼ2 = splineF2.F′′[n]
+        d²Fᵢⱼ2 = splineF2.F″[n]
         d²F₁₁2[n] = get(d²Fᵢⱼ2[1,1])
-        d²Fᵢⱼ3 = splineF3.F′′[n]
+        d²Fᵢⱼ3 = splineF3.F″[n]
         d²F₁₁3[n] = get(d²Fᵢⱼ3[1,1])
     end
     fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
@@ -1680,11 +1680,11 @@ function figures3D(N::Integer, myDirPath::String)
     d²F₁₂2 = zeros(Float64, N)
     d²F₁₂3 = zeros(Float64, N)
     for n in 1:N
-        d²Fᵢⱼ1 = splineF1.F′′[n]
+        d²Fᵢⱼ1 = splineF1.F″[n]
         d²F₁₂1[n] = get(d²Fᵢⱼ1[1,2])
-        d²Fᵢⱼ2 = splineF2.F′′[n]
+        d²Fᵢⱼ2 = splineF2.F″[n]
         d²F₁₂2[n] = get(d²Fᵢⱼ2[1,2])
-        d²Fᵢⱼ3 = splineF3.F′′[n]
+        d²Fᵢⱼ3 = splineF3.F″[n]
         d²F₁₂3[n] = get(d²Fᵢⱼ3[1,2])
     end
     fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
@@ -1799,11 +1799,11 @@ function figures3D(N::Integer, myDirPath::String)
     d²F₁₃2 = zeros(Float64, N)
     d²F₁₃3 = zeros(Float64, N)
     for n in 1:N
-        d²Fᵢⱼ1 = splineF1.F′′[n]
+        d²Fᵢⱼ1 = splineF1.F″[n]
         d²F₁₃1[n] = get(d²Fᵢⱼ1[1,3])
-        d²Fᵢⱼ2 = splineF2.F′′[n]
+        d²Fᵢⱼ2 = splineF2.F″[n]
         d²F₁₃2[n] = get(d²Fᵢⱼ2[1,3])
-        d²Fᵢⱼ3 = splineF3.F′′[n]
+        d²Fᵢⱼ3 = splineF3.F″[n]
         d²F₁₃3[n] = get(d²Fᵢⱼ3[1,3])
     end
     fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
@@ -1918,11 +1918,11 @@ function figures3D(N::Integer, myDirPath::String)
     d²F₂₁2 = zeros(Float64, N)
     d²F₂₁3 = zeros(Float64, N)
     for n in 1:N
-        d²Fᵢⱼ1 = splineF1.F′′[n]
+        d²Fᵢⱼ1 = splineF1.F″[n]
         d²F₂₁1[n] = get(d²Fᵢⱼ1[2,1])
-        d²Fᵢⱼ2 = splineF2.F′′[n]
+        d²Fᵢⱼ2 = splineF2.F″[n]
         d²F₂₁2[n] = get(d²Fᵢⱼ2[2,1])
-        d²Fᵢⱼ3 = splineF3.F′′[n]
+        d²Fᵢⱼ3 = splineF3.F″[n]
         d²F₂₁3[n] = get(d²Fᵢⱼ3[2,1])
     end
     fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
@@ -2037,11 +2037,11 @@ function figures3D(N::Integer, myDirPath::String)
     d²F₂₂2 = zeros(Float64, N)
     d²F₂₂3 = zeros(Float64, N)
     for n in 1:N
-        d²Fᵢⱼ1 = splineF1.F′′[n]
+        d²Fᵢⱼ1 = splineF1.F″[n]
         d²F₂₂1[n] = get(d²Fᵢⱼ1[2,2])
-        d²Fᵢⱼ2 = splineF2.F′′[n]
+        d²Fᵢⱼ2 = splineF2.F″[n]
         d²F₂₂2[n] = get(d²Fᵢⱼ2[2,2])
-        d²Fᵢⱼ3 = splineF3.F′′[n]
+        d²Fᵢⱼ3 = splineF3.F″[n]
         d²F₂₂3[n] = get(d²Fᵢⱼ3[2,2])
     end
     fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
@@ -2156,11 +2156,11 @@ function figures3D(N::Integer, myDirPath::String)
     d²F₂₃2 = zeros(Float64, N)
     d²F₂₃3 = zeros(Float64, N)
     for n in 1:N
-        d²Fᵢⱼ1 = splineF1.F′′[n]
+        d²Fᵢⱼ1 = splineF1.F″[n]
         d²F₂₃1[n] = get(d²Fᵢⱼ1[2,3])
-        d²Fᵢⱼ2 = splineF2.F′′[n]
+        d²Fᵢⱼ2 = splineF2.F″[n]
         d²F₂₃2[n] = get(d²Fᵢⱼ2[2,3])
-        d²Fᵢⱼ3 = splineF3.F′′[n]
+        d²Fᵢⱼ3 = splineF3.F″[n]
         d²F₂₃3[n] = get(d²Fᵢⱼ3[2,3])
     end
     fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
@@ -2275,11 +2275,11 @@ function figures3D(N::Integer, myDirPath::String)
     d²F₃₁2 = zeros(Float64, N)
     d²F₃₁3 = zeros(Float64, N)
     for n in 1:N
-        d²Fᵢⱼ1 = splineF1.F′′[n]
+        d²Fᵢⱼ1 = splineF1.F″[n]
         d²F₃₁1[n] = get(d²Fᵢⱼ1[3,1])
-        d²Fᵢⱼ2 = splineF2.F′′[n]
+        d²Fᵢⱼ2 = splineF2.F″[n]
         d²F₃₁2[n] = get(d²Fᵢⱼ2[3,1])
-        d²Fᵢⱼ3 = splineF3.F′′[n]
+        d²Fᵢⱼ3 = splineF3.F″[n]
         d²F₃₁3[n] = get(d²Fᵢⱼ3[3,1])
     end
     fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
@@ -2394,11 +2394,11 @@ function figures3D(N::Integer, myDirPath::String)
     d²F₃₂2 = zeros(Float64, N)
     d²F₃₂3 = zeros(Float64, N)
     for n in 1:N
-        d²Fᵢⱼ1 = splineF1.F′′[n]
+        d²Fᵢⱼ1 = splineF1.F″[n]
         d²F₃₂1[n] = get(d²Fᵢⱼ1[3,2])
-        d²Fᵢⱼ2 = splineF2.F′′[n]
+        d²Fᵢⱼ2 = splineF2.F″[n]
         d²F₃₂2[n] = get(d²Fᵢⱼ2[3,2])
-        d²Fᵢⱼ3 = splineF3.F′′[n]
+        d²Fᵢⱼ3 = splineF3.F″[n]
         d²F₃₂3[n] = get(d²Fᵢⱼ3[3,2])
     end
     fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
@@ -2513,11 +2513,11 @@ function figures3D(N::Integer, myDirPath::String)
     d²F₃₃2 = zeros(Float64, N)
     d²F₃₃3 = zeros(Float64, N)
     for n in 1:N
-        d²Fᵢⱼ1 = splineF1.F′′[n]
+        d²Fᵢⱼ1 = splineF1.F″[n]
         d²F₃₃1[n] = get(d²Fᵢⱼ1[3,3])
-        d²Fᵢⱼ2 = splineF2.F′′[n]
+        d²Fᵢⱼ2 = splineF2.F″[n]
         d²F₃₃2[n] = get(d²Fᵢⱼ2[3,3])
-        d²Fᵢⱼ3 = splineF3.F′′[n]
+        d²Fᵢⱼ3 = splineF3.F″[n]
         d²F₃₃3[n] = get(d²Fᵢⱼ3[3,3])
     end
     fig = Figure(; size = (809, 500)) # (500ϕ, 500), ϕ is golden ratio
