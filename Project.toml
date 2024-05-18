@@ -1,7 +1,7 @@
 name = "FijLung"
 uuid = "ebee446b-172f-49a9-b275-e96df6489ead"
 authors = ["AlanFreed <alan.d.freed@proton.me>"]
-version = "1.1.0-1"
+version = "1.1.0-2"
 
 [deps]
 CubicSplines = "2555dc27-9595-4c2f-aa4a-fc7d9c409629"
