@@ -501,10 +501,10 @@ function splineAtMidPoints(location::Integer, nodes::Integer)::SplineF
     S₃₃ = CubicSpline(rawTime, rawF₃₃)
 
     # Create the data arrays that span time which hold these data.
-    t   = ArrayOfPhysicalScalars(nodes+1, SECOND)
-    F   = ArrayOfPhysicalTensors(nodes+1, 3, 3, STRETCH)
-    F′  = ArrayOfPhysicalTensors(nodes+1, 3, 3, STRETCH_RATE)
-    F′′ = ArrayOfPhysicalTensors(nodes+1, 3, 3, STRETCH_ACEL)
+    t  = ArrayOfPhysicalScalars(nodes+1, SECOND)
+    F  = ArrayOfPhysicalTensors(nodes+1, 3, 3, STRETCH)
+    F′ = ArrayOfPhysicalTensors(nodes+1, 3, 3, STRETCH_RATE)
+    F″ = ArrayOfPhysicalTensors(nodes+1, 3, 3, STRETCH_ACEL)
 
     # Establish the time increment between adjacent nodes.
     dt = (time[knots] - time[1]) / nodes
