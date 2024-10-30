@@ -1,13 +1,18 @@
 #=
 Created on Sat 19 Feb 2022
-Updated on Sat 18 May 2024
+Updated on Wed 30 Oct 2024
 =#
 """
-Module:\n
-    testFijLung\n
-This is a test module for testing the FijLung module. It exports functions:
+# testFijLung
+
+This is a test module for testing the FijLung module, which exports data for the deformation gradient in a lung exposed to blunt force trauma. It exports functions:
+
     figures2D
     figures3D
+    
+These functions have a single argument `N` that specifies the number nodes to use in the B-spline. They create a large number of figures in two subdirectories to the test directory.
+
+Function `figures2D` applies to the 23 plane.
 """
 module testFijLung
 
@@ -33,19 +38,10 @@ export
 #=
 -------------------------------------------------------------------------------
 =#
-"""
-Function:\n 
-    figures2D(N, myDirPath)\n
-where\n
-    `N`         is the number of nodes in the B-spline.\n 
-    `myDirPath` is a string pointing to the directory where figures 
-This function tests the exported functions of FijLung for a 2D case; specifically, for the 23 plane.
-"""
-function figures2D(N::Integer, myDirPath::String)
-    # verify input
-    if !isdir(myDirPath)
-        msg = "The supplied directory path is not a valid directory."
-        throw(ErrorException(msg))
+function figures2D(N::Int)
+    my_dir_path = string(pwd(), "/test/figures2D/")
+    if !isdir(my_dir_path)
+        mkdir(my_dir_path)
     end
 
     # select figure type
@@ -61,9 +57,9 @@ function figures2D(N::Integer, myDirPath::String)
     time1 = t_loc1()
     time2 = t_loc2()
     time3 = t_loc3()
-    N₁ = Fᵢⱼs1.array.pgs
-    N₂ = Fᵢⱼs2.array.pgs
-    N₃ = Fᵢⱼs3.array.pgs
+    N₁ = Fᵢⱼs1.array.pp
+    N₂ = Fᵢⱼs2.array.pp
+    N₃ = Fᵢⱼs3.array.pp
     t1 = zeros(Float64, N₁)
     for n in 1:N₁
         t1[n] = get(time1[n])
@@ -121,8 +117,8 @@ function figures2D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rt)
-    myPath = string(myDirPath, "2DF11.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "2DF11.png")
+    save(mypath, fig)
 
     # Create a figure for F₁₂.
     println("Working on figure F₁₂ for 2D.")
@@ -166,8 +162,8 @@ function figures2D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :cb)
-    myPath = string(myDirPath, "2DF12.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "2DF12.png")
+    save(mypath, fig)
 
     # Create a figure for F₂₁.
     println("Working on figure F₂₁ for 2D.")
@@ -211,8 +207,8 @@ function figures2D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rt)
-    myPath = string(myDirPath, "2DF21.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "2DF21.png")
+    save(mypath, fig)
 
     # Create a figure for F₂₂.
     println("Working on figure F₂₂ for 2D.")
@@ -256,8 +252,8 @@ function figures2D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rt)
-    myPath = string(myDirPath, "2DF22.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "2DF22.png")
+    save(mypath, fig)
 
     # Create a figure for det(F).
     println("Working on figure det(F) for 2D.")
@@ -304,8 +300,8 @@ function figures2D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rt)
-    myPath = string(myDirPath, "2DdetF.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "2DdetF.png")
+    save(mypath, fig)
 
     # Create a figure for tr(F).
     println("Working on figure tr(F) for 2D.")
@@ -349,8 +345,8 @@ function figures2D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rt)
-    myPath = string(myDirPath, "2DtrF.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "2DtrF.png")
+    save(mypath, fig)
 
     println("Now we recreate these figures using cubic spline data.")
 
@@ -405,8 +401,8 @@ function figures2D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rt)
-    myPath = string(myDirPath, "2DF11splined.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "2DF11splined.png")
+    save(mypath, fig)
 
     # Create a figure for dF₁₁/dt.
     println("Working on figure dF₁₁/dt for 2D.")
@@ -445,8 +441,8 @@ function figures2D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rt)
-    myPath = string(myDirPath, "2DdF11splined.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "2DdF11splined.png")
+    save(mypath, fig)
 
     # Create a figure for d²F₁₁/dt².
     println("Working on figure d²F₁₁/dt² for 2D.")
@@ -485,8 +481,8 @@ function figures2D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rt)
-    myPath = string(myDirPath, "2Dd2F11splined.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "2Dd2F11splined.png")
+    save(mypath, fig)
 
     # Create figures for F₁₂ and its derivatives.
     println("Working on figure F₁₂ for 2D.")
@@ -526,8 +522,8 @@ function figures2D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :cb)
-    myPath = string(myDirPath, "2DF12splined.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "2DF12splined.png")
+    save(mypath, fig)
 
     println("Working on figure dF₁₂/dt for 2D.")
     dF₁₂1 = zeros(Float64, N)
@@ -565,8 +561,8 @@ function figures2D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rb)
-    myPath = string(myDirPath, "2DdF12splined.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "2DdF12splined.png")
+    save(mypath, fig)
 
     println("Working on figure d²F₁₂/dt² for 2D.")
     d²F₁₂1 = zeros(Float64, N)
@@ -604,8 +600,8 @@ function figures2D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rt)
-    myPath = string(myDirPath, "2Dd2F12splined.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "2Dd2F12splined.png")
+    save(mypath, fig)
 
     # Create a figure for F₂₁.
     println("Working on figure F₂₁ for 2D.")
@@ -645,8 +641,8 @@ function figures2D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rt)
-    myPath = string(myDirPath, "2DF21splined.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "2DF21splined.png")
+    save(mypath, fig)
 
     println("Working on figure dF₂₁/dt for 2D.")
     dF₂₁1 = zeros(Float64, N)
@@ -684,8 +680,8 @@ function figures2D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rb)
-    myPath = string(myDirPath, "2DdF21splined.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "2DdF21splined.png")
+    save(mypath, fig)
 
     println("Working on figure d²F₂₁/dt² for 2D.")
     d²F₂₁1 = zeros(Float64, N)
@@ -723,8 +719,8 @@ function figures2D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rt)
-    myPath = string(myDirPath, "2Dd2F21splined.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "2Dd2F21splined.png")
+    save(mypath, fig)
 
     # Create figures for F₂₂ and its derivatives.
     println("Working on figure F₂₂ for 2D.")
@@ -764,8 +760,8 @@ function figures2D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rt)
-    myPath = string(myDirPath, "2DF22splined.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "2DF22splined.png")
+    save(mypath, fig)
 
     println("Working on figure dF₂₂/dt for 2D.")
     dF₂₂1 = zeros(Float64, N)
@@ -803,8 +799,8 @@ function figures2D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rt)
-    myPath = string(myDirPath, "2DdF22splined.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "2DdF22splined.png")
+    save(mypath, fig)
 
     println("Working on figure d²F₂₂/dt for 2D.")
     d²F₂₂1 = zeros(Float64, N)
@@ -842,8 +838,8 @@ function figures2D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rt)
-    myPath = string(myDirPath, "2Dd2F22splined.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "2Dd2F22splined.png")
+    save(mypath, fig)
 
     # Create a figure for det(F).
     println("Working on figure det(F) for 2D.")
@@ -883,8 +879,8 @@ function figures2D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rt)
-    myPath = string(myDirPath, "2DdetFsplined.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "2DdetFsplined.png")
+    save(mypath, fig)
 
     # Create a figure for tr(F).
     println("Working on figure tr(F) for 2D.")
@@ -924,15 +920,14 @@ function figures2D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rt)
-    myPath = string(myDirPath, "2DtrFsplined.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "2DtrFsplined.png")
+    save(mypath, fig)
 end  # figures2D
 
-function figures3D(N::Integer, myDirPath::String)
-    # verify input
-    if !isdir(myDirPath)
-        msg = "The supplied directory path is not a valid directory."
-        throw(ErrorException(msg))
+function figures3D(N::Int)
+    my_dir_path = string(pwd(), "/test/figures3D/")
+    if !isdir(my_dir_path)
+        mkdir(my_dir_path)
     end
 
     # select figure type
@@ -946,9 +941,9 @@ function figures3D(N::Integer, myDirPath::String)
     time1 = t_loc1()
     time2 = t_loc2()
     time3 = t_loc3()
-    N₁ = Fᵢⱼs1.array.pgs
-    N₂ = Fᵢⱼs2.array.pgs
-    N₃ = Fᵢⱼs3.array.pgs
+    N₁ = Fᵢⱼs1.array.pp
+    N₂ = Fᵢⱼs2.array.pp
+    N₃ = Fᵢⱼs3.array.pp
     t1 = zeros(Float64, N₁)
     for n in 1:N₁
         t1[n] = get(time1[n])
@@ -1006,8 +1001,8 @@ function figures3D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rb)
-    myPath = string(myDirPath, "F11.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "F11.png")
+    save(mypath, fig)
 
     # Create a figure for F₁₂.
     println("Working on figure F₁₂ for 3D.")
@@ -1051,8 +1046,8 @@ function figures3D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rt)
-    myPath = string(myDirPath, "F12.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "F12.png")
+    save(mypath, fig)
 
     # Create a figure for F₁₃.
     println("Working on figure F₁₃ for 3D.")
@@ -1096,8 +1091,8 @@ function figures3D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rt)
-    myPath = string(myDirPath, "F13.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "F13.png")
+    save(mypath, fig)
 
     # Create a figure for F₂₁.
     println("Working on figure F₂₁ for 3D.")
@@ -1141,8 +1136,8 @@ function figures3D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rt)
-    myPath = string(myDirPath, "F21.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "F21.png")
+    save(mypath, fig)
 
     # Create a figure for F₂₂.
     println("Working on figure F₂₂ for 3D.")
@@ -1186,8 +1181,8 @@ function figures3D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rt)
-    myPath = string(myDirPath, "F22.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "F22.png")
+    save(mypath, fig)
 
     # Create a figure for F₂₃.
     println("Working on figure F₂₃ for 3D.")
@@ -1231,8 +1226,8 @@ function figures3D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :cb)
-    myPath = string(myDirPath, "F23.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "F23.png")
+    save(mypath, fig)
 
     # Create a figure for F₃₁.
     println("Working on figure F₃₁ for 3D.")
@@ -1276,8 +1271,8 @@ function figures3D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rt)
-    myPath = string(myDirPath, "F31.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "F31.png")
+    save(mypath, fig)
 
     # Create a figure for F₃₂.
     println("Working on figure F₃₂ for 3D.")
@@ -1321,8 +1316,8 @@ function figures3D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rt)
-    myPath = string(myDirPath, "F32.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "F32.png")
+    save(mypath, fig)
 
     # Create a figure for F₃₃.
     println("Working on figure F₃₃ for 3D.")
@@ -1366,8 +1361,8 @@ function figures3D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rt)
-    myPath = string(myDirPath, "F33.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "F33.png")
+    save(mypath, fig)
 
     # Create a figure for det(F).
     println("Working on figure det(F) for 3D.")
@@ -1411,8 +1406,8 @@ function figures3D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rb)
-    myPath = string(myDirPath, "detF.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "detF.png")
+    save(mypath, fig)
 
     # Create a figure for tr(F).
     println("Working on figure tr(F) for 3D.")
@@ -1456,8 +1451,8 @@ function figures3D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rb)
-    myPath = string(myDirPath, "trF.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "trF.png")
+    save(mypath, fig)
 
     println("Now we recreate these figures using B-spline data.")
 
@@ -1512,8 +1507,8 @@ function figures3D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rb)
-    myPath = string(myDirPath, "F11splined.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "F11splined.png")
+    save(mypath, fig)
 
     # Create a figure for dF₁₁/dt.
     println("Working on figure dF₁₁/dt for 3D.")
@@ -1552,8 +1547,8 @@ function figures3D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rb)
-    myPath = string(myDirPath, "dF11splined.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "dF11splined.png")
+    save(mypath, fig)
 
     # Create a figure for d²F₁₁/dt².
     println("Working on figure d²F₁₁/dt² for 3D.")
@@ -1592,8 +1587,8 @@ function figures3D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rt)
-    myPath = string(myDirPath, "d2F11splined.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "d2F11splined.png")
+    save(mypath, fig)
 
     # Create figures for F₁₂ and its derivatives.
     println("Working on figure F₁₂ for 3D.")
@@ -1633,8 +1628,8 @@ function figures3D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rt)
-    myPath = string(myDirPath, "F12splined.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "F12splined.png")
+    save(mypath, fig)
 
     println("Working on figure dF₁₂/dt for 3D.")
     dF₁₂1 = zeros(Float64, N)
@@ -1672,8 +1667,8 @@ function figures3D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rt)
-    myPath = string(myDirPath, "dF12splined.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "dF12splined.png")
+    save(mypath, fig)
 
     println("Working on figure d²F₁₂/dt² for 3D.")
     d²F₁₂1 = zeros(Float64, N)
@@ -1711,8 +1706,8 @@ function figures3D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rt)
-    myPath = string(myDirPath, "d2F12splined.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "d2F12splined.png")
+    save(mypath, fig)
 
     # Create figures for F₁₃ and its derivatives.
     println("Working on figure F₁₃ for 3D.")
@@ -1752,8 +1747,8 @@ function figures3D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rt)
-    myPath = string(myDirPath, "F13splined.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "F13splined.png")
+    save(mypath, fig)
 
     println("Working on figure dF₁₃/dt for 3D.")
     dF₁₃1 = zeros(Float64, N)
@@ -1791,8 +1786,8 @@ function figures3D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rb)
-    myPath = string(myDirPath, "dF13splined.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "dF13splined.png")
+    save(mypath, fig)
 
     println("Working on figure d²F₁₃/dt² for 3D.")
     d²F₁₃1 = zeros(Float64, N)
@@ -1830,8 +1825,8 @@ function figures3D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rt)
-    myPath = string(myDirPath, "d2F13splined.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "d2F13splined.png")
+    save(mypath, fig)
 
     # Create a figure for F₂₁.
     println("Working on figure F₂₁ for 3D.")
@@ -1871,8 +1866,8 @@ function figures3D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rt)
-    myPath = string(myDirPath, "F21splined.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "F21splined.png")
+    save(mypath, fig)
 
     println("Working on figure dF₂₁/dt for 3D.")
     dF₂₁1 = zeros(Float64, N)
@@ -1910,8 +1905,8 @@ function figures3D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rt)
-    myPath = string(myDirPath, "dF21splined.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "dF21splined.png")
+    save(mypath, fig)
 
     println("Working on figure d²F₂₁/dt² for 3D.")
     d²F₂₁1 = zeros(Float64, N)
@@ -1949,8 +1944,8 @@ function figures3D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rt)
-    myPath = string(myDirPath, "d2F21splined.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "d2F21splined.png")
+    save(mypath, fig)
 
     # Create figures for F₂₂ and its derivatives.
     println("Working on figure F₂₂ for 3D.")
@@ -1990,8 +1985,8 @@ function figures3D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rt)
-    myPath = string(myDirPath, "F22splined.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "F22splined.png")
+    save(mypath, fig)
 
     println("Working on figure dF₂₂/dt for 3D.")
     dF₂₂1 = zeros(Float64, N)
@@ -2029,8 +2024,8 @@ function figures3D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rt)
-    myPath = string(myDirPath, "dF22splined.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "dF22splined.png")
+    save(mypath, fig)
 
     println("Working on figure d²F₂₂/dt for 3D.")
     d²F₂₂1 = zeros(Float64, N)
@@ -2068,8 +2063,8 @@ function figures3D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rt)
-    myPath = string(myDirPath, "d2F22splined.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "d2F22splined.png")
+    save(mypath, fig)
 
     # Create figures for F₂₃ and its derivatives.
     println("Working on figure F₂₃ for 3D.")
@@ -2109,8 +2104,8 @@ function figures3D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :cb)
-    myPath = string(myDirPath, "F23splined.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "F23splined.png")
+    save(mypath, fig)
 
     println("Working on figure dF₂₃/dt for 3D.")
     dF₂₃1 = zeros(Float64, N)
@@ -2148,8 +2143,8 @@ function figures3D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rb)
-    myPath = string(myDirPath, "dF23splined.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "dF23splined.png")
+    save(mypath, fig)
 
     println("Working on figure d²F₂₃/dt for 3D.")
     d²F₂₃1 = zeros(Float64, N)
@@ -2187,8 +2182,8 @@ function figures3D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rt)
-    myPath = string(myDirPath, "d2F23splined.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "d2F23splined.png")
+    save(mypath, fig)
 
     # Create a figure for F₃₁.
     println("Working on figure F₃₁ for 3D.")
@@ -2228,8 +2223,8 @@ function figures3D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rt)
-    myPath = string(myDirPath, "F31splined.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "F31splined.png")
+    save(mypath, fig)
 
     println("Working on figure dF₃₁/dt for 3D.")
     dF₃₁1 = zeros(Float64, N)
@@ -2267,8 +2262,8 @@ function figures3D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rt)
-    myPath = string(myDirPath, "dF31splined.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "dF31splined.png")
+    save(mypath, fig)
 
     println("Working on figure d²F₃₁/dt² for 3D.")
     d²F₃₁1 = zeros(Float64, N)
@@ -2306,8 +2301,8 @@ function figures3D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rt)
-    myPath = string(myDirPath, "d2F31splined.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "d2F31splined.png")
+    save(mypath, fig)
 
     # Create figures for F₃₂ and its derivatives.
     println("Working on figure F₃₂ for 3D.")
@@ -2347,8 +2342,8 @@ function figures3D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rt)
-    myPath = string(myDirPath, "F32splined.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "F32splined.png")
+    save(mypath, fig)
 
     println("Working on figure dF₃₂/dt for 3D.")
     dF₃₂1 = zeros(Float64, N)
@@ -2386,8 +2381,8 @@ function figures3D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rb)
-    myPath = string(myDirPath, "dF32splined.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "dF32splined.png")
+    save(mypath, fig)
 
     println("Working on figure d²F₃₂/dt for 3D.")
     d²F₃₂1 = zeros(Float64, N)
@@ -2425,8 +2420,8 @@ function figures3D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rt)
-    myPath = string(myDirPath, "d2F32splined.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "d2F32splined.png")
+    save(mypath, fig)
 
     # Create figures for F₃₃ and its derivatives.
     println("Working on figure F₃₃ for 3D.")
@@ -2466,8 +2461,8 @@ function figures3D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rt)
-    myPath = string(myDirPath, "F33splined.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "F33splined.png")
+    save(mypath, fig)
 
     println("Working on figure dF₃₃/dt for 3D.")
     dF₃₃1 = zeros(Float64, N)
@@ -2505,8 +2500,8 @@ function figures3D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rt)
-    myPath = string(myDirPath, "dF33splined.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "dF33splined.png")
+    save(mypath, fig)
 
     println("Working on figure d²F₃₃/dt for 3D.")
     d²F₃₃1 = zeros(Float64, N)
@@ -2544,8 +2539,8 @@ function figures3D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rt)
-    myPath = string(myDirPath, "d2F33splined.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "d2F33splined.png")
+    save(mypath, fig)
 
     # Create a figure for det(F).
     println("Working on figure det(F)-1 for 3D.")
@@ -2585,8 +2580,8 @@ function figures3D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rb)
-    myPath = string(myDirPath, "detFsplined.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "detFsplined.png")
+    save(mypath, fig)
 
     # Create a figure for tr(F).
     println("Working on figure tr(F) for 3D.")
@@ -2626,8 +2621,8 @@ function figures3D(N::Integer, myDirPath::String)
         label = "3: bronchiole")
     axislegend("Locations",
         position = :rb)
-    myPath = string(myDirPath, "trFsplined.png")
-    save(myPath, fig)
+    mypath = string(my_dir_path, "trFsplined.png")
+    save(mypath, fig)
 
 end  # figures3D
 
