@@ -3,18 +3,21 @@ Created on Fri 18 Feb 2022
 Updated on Sat 18 May 2024
 =#
 """
-Module:\n
-    FijLung\n
-This module constructs deformation gradient histories at three locations taken from a finite element analysis of a human torso that has been subjected to a ballistic projectile. Location 1 lies just under the pleura membrane, and therefore resides close to the rib-cage and the location of impact. Location 2 lies deep within the lung. While location 3 lies adjacent to a bronchiole tube. These raw data sets are fit with B-splines to get continuous functions for the deformation gradient, thereby allowing its first and second derivatives in time to be approximated. This module exports:\n
-    t_loc1,     # Raw data: times at location near visceral pleura.\n
-    t_loc2,     # Raw data: times at location deep within the lung.\n
-    t_loc3,     # Raw data: times at location next to bronchiole tube.\n
-    F_loc1,     # Raw data: deformation gradient at location 1.\n
-    F_loc2,     # Raw data: deformation gradient at location 2.\n
-    F_loc3,     # Raw data: deformation gradient at location 3.\n
-    SplineF,    # Type used to hold these spline data.\n
-along with two external constructors:\n
-    splineAtEndPoints   # Spline nodes are at end points of time intervals.\n
+# FijLung
+
+This module constructs deformation gradient histories at three locations taken from a finite element analysis of a human torso that has been subjected to a ballistic projectile. Location 1 lies just under the pleura membrane, and therefore resides close to the rib-cage and the location of impact. Location 2 lies deep within the lung. While location 3 lies adjacent to a bronchiole tube. These raw data sets are fit with B-splines to get continuous functions for the deformation gradient, thereby allowing its first and second derivatives in time to be approximated. This module exports:
+
+    t_loc1,     # Raw data: times at location near visceral pleura.
+    t_loc2,     # Raw data: times at location deep within the lung.
+    t_loc3,     # Raw data: times at location next to bronchiole tube.
+    F_loc1,     # Raw data: deformation gradient at location 1.
+    F_loc2,     # Raw data: deformation gradient at location 2.
+    F_loc3,     # Raw data: deformation gradient at location 3.
+    SplineF,    # Type used to hold these spline data.
+    
+along with two external constructors:
+
+    splineAtEndPoints   # Spline nodes are at end points of time intervals.
     splineAtMidPoints   # Spline nodes are at mid points of time intervals.
 """
 module FijLung
@@ -46,9 +49,10 @@ const STRETCH_ACEL  = CGS_ACCELERATION - CGS_LENGTH
 -------------------------------------------------------------------------------
 =#
 """
-Function:\n
-    arrayOfTimes = t_loc1()\n
-This function returns an instance of type `PhysicalFields.ArrayOfPhysicalScalars,` where each element within the array holds a time whereat a deformation gradient is evaluated at location 1 (just under the visceral pleura) from an FEA of a human torso subjected to a high-energy ballistic impact.
+```julia
+function t_loc1()::ArrayOfPhysicalScalars
+```
+This function returns an instance of type `PhysicalFields.ArrayOfPhysicalScalars`, where each element within the array holds a time whereat a deformation gradient is evaluated at location 1 (just under the visceral pleura) from an FEA of a human torso subjected to a high-energy ballistic impact.
 """
 function t_loc1()::ArrayOfPhysicalScalars
     # Open an existing file and read its data as a DataFrames.DataFrame object.
@@ -57,8 +61,7 @@ function t_loc1()::ArrayOfPhysicalScalars
     # Create an array holding the time for each data entry.
     (N, M) = size(dataF11)
     if M ≠ 2
-        msg = "Files Fij.csv have an unexpected format."
-        throw(ErrorException(msg))
+        error("Files Fij.csv have an unexpected format.")
     end
     # Create a new array of times.
     tLoc1 = ArrayOfPhysicalScalars(N, SECOND)
@@ -70,9 +73,10 @@ function t_loc1()::ArrayOfPhysicalScalars
 end
 
 """
-Function:\n
-    arrayOfF = F_loc1()\n
-This function returns an instance of type `PhysicalFields.ArrayOfPhysicalTensors,` where each element within the array holds a deformation gradient tensor evaluated at location 1 (just under the visceral pleura) from an FEA of a human torso subjected to a high-energy ballistic impact. The time associated with each entry is supplied by the function `t_loc1().`
+```julia
+function F_loc1()::ArrayOfPhysicalTensors
+```
+This function returns an instance of type `PhysicalFields.ArrayOfPhysicalTensors`, where each element within the array holds a deformation gradient tensor evaluated at location 1 (just under the visceral pleura) from an FEA of a human torso subjected to a high-energy ballistic impact. The time associated with each entry is supplied by the function `t_loc1()`.
 """
 function F_loc1()::ArrayOfPhysicalTensors
     # Open existing files. Read in their data as DataFrames.DataFrame objects.
@@ -97,8 +101,7 @@ function F_loc1()::ArrayOfPhysicalTensors
     # Size the arrays.
     (N, M) = size(dataF11)
     if M ≠ 2
-        msg = "Files Fij.csv have an unexpected format."
-        throw(ErrorException(msg))
+        error("Files Fij.csv have an unexpected format.")
     end
     # Create a new array with entries of type PhysicalTensor.
     FLoc1 = ArrayOfPhysicalTensors(N, 3, 3, STRETCH)
@@ -121,9 +124,10 @@ function F_loc1()::ArrayOfPhysicalTensors
 end
 
 """
-Function:\n
-    arrayOfTimes = t_loc2()\n
-This function returns an instance of type `PhysicalFields.ArrayOfPhysicalScalars,` where each element within the array holds a time whereat a deformation gradient is evaluated at location 2 (roughly at the center of the right lung) from an FEA of a human torso subjected to a high-energy ballistic impact.
+```julia
+function t_loc2()::ArrayOfPhysicalScalars
+```
+This function returns an instance of type `PhysicalFields.ArrayOfPhysicalScalars`, where each element within the array holds a time whereat a deformation gradient is evaluated at location 2 (roughly at the center of the right lung) from an FEA of a human torso subjected to a high-energy ballistic impact.
 """
 function t_loc2()::ArrayOfPhysicalScalars
     # Open an existing file and read its data as a DataFrames.DataFrame object.
@@ -132,8 +136,7 @@ function t_loc2()::ArrayOfPhysicalScalars
     # Create an array holding the time for each data entry.
     (N, M) = size(dataF11)
     if M ≠ 2
-        msg = "Files Fij.csv have an unexpected format."
-        throw(ErrorException(msg))
+        error("Files Fij.csv have an unexpected format.")
     end
     # Create a new array of times whose initial time is t₁.
     tLoc2 = ArrayOfPhysicalScalars(N, SECOND)
@@ -145,9 +148,10 @@ function t_loc2()::ArrayOfPhysicalScalars
 end
 
 """
-Function:\n
-    arrayOfF = F_loc2()\n
-This function returns an instance of type `PhysicalFields.ArrayOfPhysicalTensors,` where each element within the array holds a deformation gradient tensor evaluated at location 2 (roughly at the center of the right lung) from an FEA of a human torso subjected to a high-energy ballistic impact. The time associated with each entry is supplied by the function `t_loc2().`
+```julia
+function F_loc2()::ArrayOfPhysicalTensors
+```
+This function returns an instance of type `PhysicalFields.ArrayOfPhysicalTensors`, where each element within the array holds a deformation gradient tensor evaluated at location 2 (roughly at the center of the right lung) from an FEA of a human torso subjected to a high-energy ballistic impact. The time associated with each entry is supplied by the function `t_loc2()`.
 """
 function F_loc2()::ArrayOfPhysicalTensors
     # Open existing files. Read in their data as DataFrames.DataFrame objects.
@@ -172,8 +176,7 @@ function F_loc2()::ArrayOfPhysicalTensors
     # Size the arrays.
     (N, M) = size(dataF11)
     if M ≠ 2
-        msg = "Files Fij.csv have an unexpected format."
-        throw(ErrorException(msg))
+        error("Files Fij.csv have an unexpected format.")
     end
     # Create a new array with entries of type PhysicalTensor.
     FLoc2 = ArrayOfPhysicalTensors(N, 3, 3, STRETCH)
@@ -196,9 +199,10 @@ function F_loc2()::ArrayOfPhysicalTensors
 end
 
 """
-Function:\n
-    arrayOfTimes = t_loc3()\n
-This function returns an instance of type `PhysicalFields.ArrayOfPhysicalScalars,` where each element within the array holds a time whereat a deformation gradient is evaluated at location 3 (adjacent to a bronchiole tube) from an FEA of a human torso subjected to a high-energy ballistic impact.
+```julia
+function t_loc3()::ArrayOfPhysicalScalars
+```
+This function returns an instance of type `PhysicalFields.ArrayOfPhysicalScalars`, where each element within the array holds a time whereat a deformation gradient is evaluated at location 3 (adjacent to a bronchiole tube) from an FEA of a human torso subjected to a high-energy ballistic impact.
 """
 function t_loc3()::ArrayOfPhysicalScalars
     # Open an existing file and read its data as a DataFrames.DataFrame object.
@@ -207,8 +211,7 @@ function t_loc3()::ArrayOfPhysicalScalars
     # Create an array holding the time for each data entry.
     (N, M) = size(dataF11)
     if M ≠ 2
-        msg = "Files Fij.csv have an unexpected format."
-        throw(ErrorException(msg))
+        error("Files Fij.csv have an unexpected format.")
     end
     # Create a new array of times whose initial time is t₁.
     tLoc3 = ArrayOfPhysicalScalars(N, SECOND)
@@ -220,9 +223,10 @@ function t_loc3()::ArrayOfPhysicalScalars
 end
 
 """
-Function:\n
-    arrayOfF = F_loc3()\n
-This function returns an instance of type `PhysicalFields.ArrayOfPhysicalTensors,` where each element within the array holds a deformation gradient tensor evaluated at location 3 (adjacent to a bronchiole tube) from an FEA of a human torso subjected to a high-energy ballistic impact. The time associated with each entry is supplied by the function `t_loc3().`
+```julia
+function F_loc3()::ArrayOfPhysicalTensors
+```
+This function returns an instance of type `PhysicalFields.ArrayOfPhysicalTensors`, where each element within the array holds a deformation gradient tensor evaluated at location 3 (adjacent to a bronchiole tube) from an FEA of a human torso subjected to a high-energy ballistic impact. The time associated with each entry is supplied by the function `t_loc3()`.
 """
 function F_loc3()::ArrayOfPhysicalTensors
     # Open existing files. Read in their data as DataFrames.DataFrame objects.
@@ -247,8 +251,7 @@ function F_loc3()::ArrayOfPhysicalTensors
     # Size the arrays.
     (N, M) = size(dataF11)
     if M ≠ 2
-        msg = "Files Fij.csv have an unexpected format."
-        throw(ErrorException(msg))
+        error("Files Fij.csv have an unexpected format.")
     end
     # Populate the array.
     FLoc3 = ArrayOfPhysicalTensors(N, 3, 3, STRETCH)
@@ -269,21 +272,15 @@ function F_loc3()::ArrayOfPhysicalTensors
     end
     return FLoc3
 end
+
 #=
 --------------------------------------------------------------------------------
 =#
+
 """
-Type:\n
-    SplineF\n
-        loc     # Location whereat this interpolation applies, loc ∈ {1,2,3}.\n
-        N       # Number of uniform interpolation intervals spanning time.\n
-        t       # Time associated with each node in this interpolation.\n
-        F       # F         The deformation gradient.\n
-        F′      # dF/dt     Its first derivative in time.\n
-        F″      # d²F/dt²   Its second derivative in time.\n
-This data structure smooths the raw data supplied by F_loc1, F_loc2 or F_loc3, as specified by parameter `loc,` by applying B-splines to the raw data; specifically, F is fit with a cubic spline, and therefore, its first derivative dF/dt is described by a quadratic spline, and its second derivative d²F/dt² is described by a linear spline. Fields `loc` and `N` are Integers. Field `t` is an instance of type `PhysicalFields.ArrayOfPhysicalScalars,` while fields `F,` `F′` and `F″` are instances of type `PhysicalFields.ArrayOfPhysicalTensors.` The data arrays are of length N+1 with entry [1] supplying its initial condition, while the remaining N entries are evenly spaced through time.\n
-The supplied deformation gradient and its first two derivatives are evaluated at one of three lung locations extracted from an FE analysis of a human torso subjected to a ballistic impact. Location loc = 1 associates with a location that is just under the visceral pleura, near the point of impact. Location loc = 2 associates with a location that is deep within the lung. While location loc = 3 associates with a location that lies next to a bronchiole tube.
-"""
+# SplineF
+
+```julia
 struct SplineF
     loc::Integer                  # loc       Lung location, i.e., 1, 2 or 3.
     N::  Integer                  # N         Number of nodes spanning time.
@@ -291,28 +288,51 @@ struct SplineF
     F::ArrayOfPhysicalTensors     # F         Their deformation gradients.
     F′::ArrayOfPhysicalTensors    # dF/dt     Their first derivatives in time.
     F″::ArrayOfPhysicalTensors    # d²F/dt²   Their second derivatives in time.
+end
+```
+This data structure smooths the raw data supplied by F_loc1, F_loc2 or F_loc3, as specified by parameter `loc`, by applying B-splines to the raw data; specifically, F is fit with a cubic spline, and therefore, its first derivative `dF/dt` is described by a quadratic spline, and its second derivative `d²F/dt²` is described by a linear spline. Fields `loc` and `N` are Integers. Field `t` is an instance of type `PhysicalFields.ArrayOfPhysicalScalars`, while fields `F,` `F′` and `F″` are instances of type `PhysicalFields.ArrayOfPhysicalTensors`. The data arrays are of length N+1 with entry [1] supplying its initial condition, while the remaining N entries are evenly spaced through time.
+
+## Internal Constructor
+
+This constructor is called by the two external constructors, which are the constructors intended for use.
+
+```julia
+splineF = SplineF(loc::Int, N::Int, t::ArrayOfPhysicalScalars, F::ArrayOfPhysicalTensors, F′::ArrayOfPhysicalTensors, F″::ArrayOfPhysicalTensors)
+```
+
+## External Constructors
+
+These two constructors create instances of type `SplineF`, which are returned as an object `splineF`. Each object contains interpolated values for the deformation gradient F, its first derivative dF/dt, and its second derivative d²F/dt² at N uniformly spaced `nodes` over time. The arrays are of length N+1, with the first entry in each array associating with its corresponding initial condition, while the remaining entries associate with either mid-point or end-point values for N uniformly spaced time intervals.
+
+Each data structure associates with one of three `location`s in a lung obtained from an FE analysis of a human torso subjected to a ballistic impact. Location 1 associates with a location that is just under the visceral pleura. Location 2 associates with a location that is deep within the right lung. While location 3 associates with a location that lies next to a bronchiole tube.
+
+```julia
+splineF = splineAtEndPoints(location::Int, nodes::Int)
+```
+
+```julia
+splineF = splineAtMidPoints(location::Int, nodes::Int)
+```
+"""
+struct SplineF
+    loc::Int                      # loc       Lung location, i.e., 1, 2 or 3.
+    N::  Int                      # N         Number of nodes spanning time.
+    t::ArrayOfPhysicalScalars     # t         The time at these nodes.
+    F::ArrayOfPhysicalTensors     # F         Their deformation gradients.
+    F′::ArrayOfPhysicalTensors    # dF/dt     Their first derivatives in time.
+    F″::ArrayOfPhysicalTensors    # d²F/dt²   Their second derivatives in time.
 
     # Internal Constructor
-    function SplineF(loc::Integer, N::Integer, t::ArrayOfPhysicalScalars, F::ArrayOfPhysicalTensors, F′::ArrayOfPhysicalTensors, F″::ArrayOfPhysicalTensors)
 
-        new(loc, N, t, F, F′, F″)
+    function SplineF(loc::Int, N::Int, t::ArrayOfPhysicalScalars, F::ArrayOfPhysicalTensors, F′::ArrayOfPhysicalTensors, F″::ArrayOfPhysicalTensors)
+
+        new(loc, N, t, F, F′, F″)::SplineF
     end
 end # SplineF
 
 # External Constructors
 
-"""
-    splineAtEndPoints(location::Integer, nodes::Integer)::SplineF
-
-Constructor:
-
-    splineF = splineAtEndPoints(location, nodes)
-
-This constructor creates an instance of type SplineF, which is returned as an object `splineF.` Each object contains interpolated values for the deformation gradient F, its first derivative dF/dt, and its second derivative d²F/dt² at N uniformly spaced `nodes` over time. The arrays are of length N+1, with the first entry in each array associating with its corresponding initial condition, while the remaining entries associate with end-point values for N uniformly spaced time intervals.
-
-Each data structure associates with one of three locations in a lung obtained from an FE analysis of a human torso subjected to a ballistic impact. Location 1 associates with a location that is just under the visceral pleura. Location 2 associates with a location that is deep within the right lung. While location 3 associates with a location that lies next to a bronchiole tube.
-"""
-function splineAtEndPoints(location::Integer, nodes::Integer)::SplineF
+function splineAtEndPoints(location::Int, nodes::Int)::SplineF
     # Import the data to be fit with B-splines.
     if location == 1
         time = t_loc1()
@@ -324,10 +344,9 @@ function splineAtEndPoints(location::Integer, nodes::Integer)::SplineF
         time = t_loc3()
         rawF = F_loc3()
     else
-        msg = "An inadmissible location was submitted. It must be 1, 2 or 3."
-        throw(ErrorException(msg))
+        error("An inadmissible location was submitted. It must be 1, 2 or 3.")
     end
-    knots = Int64(time.array.len)
+    knots = time.array.len
 
     # Create the various static arrays that will hold these raw data.
     rawTime = zeros(Float64, knots)
@@ -439,13 +458,7 @@ function splineAtEndPoints(location::Integer, nodes::Integer)::SplineF
     return splineF
 end # splineAtEndPoints
 
-"""
-Constructor:\n
-    splineF = splineAtMidPoints(location, nodes)\n
-This constructor creates an instance of type SplineF, which is returned as an object `splineF.` Each object contains interpolated values for the deformation gradient F, its first derivative dF/dt, and its second derivative d²F/dt² at N uniformly spaced `nodes` over time. The arrays are of length N+1, with the first entry in each array associating with its corresponding initial condition, while the remaining entries associate with mid-point values for N uniformly spaced time intervals.\n
-Each data structure associates with one of three locations in a lung obtained from an FE analysis of a human torso subjected to a ballistic impact. Location 1 associates with a location that is just under the visceral pleura. Location 2 associates with a location that is deep within the right lung. While location 3 associates with a location that lies next to a bronchiole tube.
-"""
-function splineAtMidPoints(location::Integer, nodes::Integer)::SplineF
+function splineAtMidPoints(location::Int, nodes::Int)::SplineF
     # Import the data to be fit with B-splines.
     if location == 1
         time = t_loc1()
@@ -457,10 +470,9 @@ function splineAtMidPoints(location::Integer, nodes::Integer)::SplineF
         time = t_loc3()
         rawF = F_loc3()
     else
-        msg = "An inadmissible location was submitted. It must be 1, 2 or 3."
-        throw(ErrorException(msg))
+        error("An inadmissible location was submitted. It must be 1, 2 or 3.")
     end
-    knots = Int64(time.array.len)
+    knots = time.array.len
 
     # Create the various static arrays that will hold these raw data.
     rawTime = zeros(Float64, knots)
