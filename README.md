@@ -14,6 +14,7 @@ Pkg.add(url = "https://github.com/AlanFreed/CubicSplines.jl")
 Pkg.add(url = "https://github.com/AlanFreed/PhysicalFields.jl")
 Pkg.add(url = "https://github.com/AlanFreed/FijLung.jl")
 ```
+
 ## Locations
 
 These three locations lie on the same horizontal plane of a right lung, roughly placed midway between the top and bottom surfaces of a lung, i.e., they lie within a 1-3 plane.
@@ -68,7 +69,7 @@ struct SplineF
     t::  ArrayOfPhysicalScalars   # t         Time at the node of each interval.
     F::  ArrayOfPhysicalTensors   # F         Their deformation gradients.
     F′:: ArrayOfPhysicalTensors   # dF/dt     Their first derivatives in time.
-    F″::ArrayOfPhysicalTensors    # d²F/dt²   Their second derivatives in time.
+    F″:: ArrayOfPhysicalTensors   # d²F/dt²   Their second derivatives in time.
 end
 ```
 
@@ -77,8 +78,8 @@ end
 Two constructors are provided. The first returns a data structure of type `SplineF` whose arrays have entries located at the *end points* of the `N` uniform time intervals spanning the 34 milliseconds, i.e., their nodes are located at the end points of the intervals. The second returns a data structure whose arrays have entries located at the *mid points* of the `N` uniform time intervals spanning the 34 milliseconds, i.e., their nodes are located at the mid points of the intervals. All arrays are of length N+1 with their first entry [1] holding its initial condition and the remaining N entries holding either the end-point or the mid-point data, per the function called.
 
 ```
-function splineAtEndPoints(location::Integer, nodes::Integer)::SplineF
-function splineAtMidPoints(location::Integer, nodes::Integer)::SplineF
+function splineAtEndPoints(location::Int, nodes::Int)::SplineF
+function splineAtMidPoints(location::Int, nodes::Int)::SplineF
 ```
 
 There are 340 knots, or raw data points, supplied by the data files that the spline function fits. Typically, the number of nodes required of an analysis will be a value much greater than this, e.g., 1000. The deformation gradient `SplineF.F` comes from a clamped cubic spline of these raw data. Its first derivative `SplineF.F′` is therefore described by a quadratic spline, while its second derivative `SplineF.F″` is described by a linear spline.
@@ -88,6 +89,10 @@ There are 340 knots, or raw data points, supplied by the data files that the spl
 An example of how these data can be used, e.g., plotted, can be found in the *test* directory in file *testFijLung.jl*.
 
 # Version History
+
+## Version 1.1.1
+
+Improved the documentation.
 
 ## Version 1.1.0
 
