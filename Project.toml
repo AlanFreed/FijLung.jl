@@ -1,16 +1,17 @@
 name = "FijLung"
 uuid = "ebee446b-172f-49a9-b275-e96df6489ead"
+version = "1.1.2"
 authors = ["AlanFreed <alan.d.freed@proton.me>"]
-version = "1.1.1"
 
 [deps]
 CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
-CairoMakie = "13f3f980-e62b-5c42-98c6-ff1f3baf88f0"
 CubicSplines = "2555dc27-9595-4c2f-aa4a-fc7d9c409629"
 DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
 Downloads = "f43a241f-c20a-4ad4-852c-f6b1247861c6"
 PhysicalFields = "ecb0663d-aa47-424e-b5ff-03a0dca9671a"
+Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
 
 [compat]
 CSV = "0.10.12"
 CubicSplines = "0.1.2"
+Plots = "1.41.4"

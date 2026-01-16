@@ -90,6 +90,10 @@ An example of how these data can be used, e.g., plotted, can be found in the *te
 
 # Version History
 
+## Version 1.1.2
+
+Switched from CairoMakie to Plots for creating figures.
+
 ## Version 1.1.1
 
 Improved the documentation.
